@@ -1,0 +1,26 @@
+{
+  "name": "bapcat/persist",
+  "description": "A unified, object-oriented way to store data across media",
+  "license": "GPLv3",
+  "homepage": "http://github.com/BapCat/Persist",
+  "keywords": ["File", "System", "Persist", "Persistence", "Storage", "Medium", "Media"],
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Corey Frenette",
+      "email": "corey@narwhunderful.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "bapcat/interfaces": "dev-master"
+  },
+  "require-dev": {
+    "satooshi/php-coveralls": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "BapCat\\Persist\\": "src/"
+    }
+  }
+}
