@@ -8,7 +8,7 @@ class FilesystemFile extends File {
   }
   
   /* NON-STANDARD METHODS */
-  protected function getFullPath($path) {
+  protected function getFullPath() {
     return $this->driver->getFullPath($this);
   }
 }
