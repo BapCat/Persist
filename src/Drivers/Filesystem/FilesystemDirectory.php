@@ -23,6 +23,6 @@ class FilesystemDirectory extends Directory {
   
   /* NON-STANDARD METHODS */
   protected function getFullPath() {
-    return $this->driver->getFullPath($this);
+    return $this->driver->getFullPath($this->path);
   }
 }
