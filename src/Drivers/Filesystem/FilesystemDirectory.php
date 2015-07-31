@@ -20,4 +20,9 @@ class FilesystemDirectory extends Directory {
     
     return $paths;
   }
+  
+  /* NON-STANDARD METHODS */
+  protected function getFullPath($path) {
+    return $this->driver->getFullPath($this);
+  }
 }
