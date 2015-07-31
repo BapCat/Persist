@@ -69,7 +69,7 @@ class FilesystemDriver extends Driver {
   }
   
   public function modified(Path $path) {
-    $time = @filemtime($this->getFullPath($path));
+    $time = @filemtime($this->getFullPath($path->path));
     
     if($time === false) {
       throw new PathNotFoundException($path);
