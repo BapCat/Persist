@@ -7,6 +7,10 @@ class FilesystemFile extends File {
     parent::__construct($driver, $path);
   }
   
+  public function makeLocal() {
+    return $this;
+  }
+  
   /* NON-STANDARD METHODS */
   protected function getFullPath() {
     return $this->driver->getFullPath($this->path);
