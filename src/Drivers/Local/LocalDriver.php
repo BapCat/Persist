@@ -1,13 +1,13 @@
-<?php namespace BapCat\Persist\Drivers\Filesystem;
+<?php namespace BapCat\Persist\Drivers\Local;
 
-use BapCat\Interfaces\Exceptions\PathNotFoundException;
-use BapCat\Interfaces\Persist\Driver;
-use BapCat\Interfaces\Persist\File;
-use BapCat\Interfaces\Persist\Path;
+use BapCat\Persist\Driver;
+use BapCat\Persist\File;
+use BapCat\Persist\Path;
+use BapCat\Persist\PathNotFoundException;
 
 use InvalidArgumentException;
 
-class FilesystemDriver extends Driver {
+class LocalDriver extends Driver {
   private $root;
   
   public function __construct($root) {
@@ -19,11 +19,11 @@ class FilesystemDriver extends Driver {
   }
   
   protected function instantiateFile($path) {
-    return new FilesystemFile($this, $path);
+    return new LocalFile($this, $path);
   }
   
   protected function instantiateDir($path) {
-    return new FilesystemDirectory($this, $path);
+    return new LocalDirectory($this, $path);
   }
   
   public function isDir($path) {

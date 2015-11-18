@@ -1,12 +1,12 @@
-<?php namespace BapCat\Persist\Drivers\Filesystem;
+<?php namespace BapCat\Persist\Drivers\Local;
 
-use BapCat\Interfaces\Persist\Directory;
+use BapCat\Persist\Directory;
 
 use DirectoryIterator;
 use FilesystemIterator;
 
-class FilesystemDirectory extends Directory {
-  public function __construct(FilesystemDriver $driver, $path) {
+class LocalDirectory extends Directory {
+  public function __construct(LocalDriver $driver, $path) {
     parent::__construct($driver, $path);
   }
   

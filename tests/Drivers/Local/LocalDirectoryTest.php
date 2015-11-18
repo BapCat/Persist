@@ -3,9 +3,9 @@
 require_once __DIR__ . '/../../_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
 
-use BapCat\Persist\Drivers\Filesystem\FilesystemDirectory;
+use BapCat\Persist\Drivers\Local\LocalDirectory;
 
-class DirectoryTest extends PHPUnit_Framework_TestCase {
+class LocalDirectoryTest extends PHPUnit_Framework_TestCase {
   use FileCreatorTrait;
   
   private $driver;
@@ -20,7 +20,7 @@ class DirectoryTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testLoadChildren() {
-    $directory = new FilesystemDirectory($this->driver, basename($this->datadir));
+    $directory = new LocalDirectory($this->driver, basename($this->datadir));
     $children = $directory->children;
     $expected = $this->listFiles($this->datadir);
     

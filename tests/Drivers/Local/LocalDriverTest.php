@@ -3,7 +3,10 @@
 require_once __DIR__ . '/../../_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
 
-use BapCat\Persist\Drivers\Filesystem\FilesystemDriver;
+use BapCat\Persist\Directory;
+use BapCat\Persist\File;
+use BapCat\Persist\Drivers\Local\LocalDriver;
+use BapCat\Persist\PathNotFoundException;
 
 class DriverTest extends PHPUnit_Framework_TestCase {
   use FileCreatorTrait;
@@ -12,7 +15,7 @@ class DriverTest extends PHPUnit_Framework_TestCase {
   
   public function setUp() {
     $this->createTestFiles();
-    $this->driver = new FilesystemDriver($this->datadir);
+    $this->driver = new LocalDriver($this->datadir);
   }
   
   public function tearDown() {
@@ -21,10 +24,10 @@ class DriverTest extends PHPUnit_Framework_TestCase {
   
   public function testGet() {
     $file = $this->driver->get($this->filename);
-    $this->assertInstanceOf('BapCat\Interfaces\Persist\File', $file);
+    $this->assertInstanceOf(File::class, $file);
     
     $dir = $this->driver->get($this->dirname);
-    $this->assertInstanceOf('BapCat\Interfaces\Persist\Directory', $dir);
+    $this->assertInstanceOf(Directory::class, $dir);
   }
   
   public function testIsFile() {
@@ -33,7 +36,7 @@ class DriverTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testIsFileWithInvalidPath() {
-    $this->setExpectedException('InvalidArgumentException');
+    $this->setExpectedException(InvalidArgumentException::class);
     $this->driver->isFile(null);
   }
   
@@ -43,7 +46,7 @@ class DriverTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testIsDirWithInvalidPath() {
-    $this->setExpectedException('InvalidArgumentException');
+    $this->setExpectedException(InvalidArgumentException::class);
     $this->driver->isDir(null);
   }
   
@@ -133,7 +136,7 @@ class DriverTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testSizeFileDoesntExist() {
-    $this->setExpectedException('BapCat\Interfaces\Exceptions\PathNotFoundException');
+    $this->setExpectedException(PathNotFoundException::class);
     
     $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
     $this->driver->size($file);

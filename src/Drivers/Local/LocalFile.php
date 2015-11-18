@@ -1,9 +1,9 @@
-<?php namespace BapCat\Persist\Drivers\Filesystem;
+<?php namespace BapCat\Persist\Drivers\Local;
 
-use BapCat\Interfaces\Persist\File;
+use BapCat\Persist\File;
 
-class FilesystemFile extends File {
-  public function __construct(FilesystemDriver $driver, $path) {
+class LocalFile extends File {
+  public function __construct(LocalDriver $driver, $path) {
     parent::__construct($driver, $path);
   }
   
