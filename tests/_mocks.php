@@ -70,6 +70,10 @@ function mockDriver(PHPUnit_Framework_TestCase $testcase, $exists = true) {
     ->method('isWritable')
     ->willReturn(true);
   
+  $driver
+    ->method('modified')
+    ->willReturn(0);
+  
   return $driver;
 }
 

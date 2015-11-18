@@ -16,5 +16,6 @@ class PathTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($path->is_link);
     $this->assertTrue($path->is_readable);
     $this->assertTrue($path->is_writable);
+    $this->assertSame(0, $path->modified);
   }
 }
