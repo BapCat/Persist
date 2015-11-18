@@ -28,4 +28,10 @@ class LocalDirectoryTest extends PHPUnit_Framework_TestCase {
       $this->assertTrue(in_array($child->name, $expected));
     }
   }
+  
+  public function testGetFullPath() {
+    $directory = new LocalDirectory($this->driver, basename($this->datadir));
+    
+    $this->assertSame($this->datadir, $directory->full_path);
+  }
 }
