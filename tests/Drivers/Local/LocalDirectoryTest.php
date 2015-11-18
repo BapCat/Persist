@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../_mocks.php';
+require_once __DIR__ . '/_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
 
 use BapCat\Persist\Drivers\Local\LocalDirectory;
@@ -12,7 +12,7 @@ class LocalDirectoryTest extends PHPUnit_Framework_TestCase {
   
   public function setUp() {
     $this->createTestFiles();
-    $this->driver = mockDriver($this, dirname($this->datadir));
+    $this->driver = mockLocalDriver($this, dirname($this->datadir));
   }
   
   public function tearDown() {

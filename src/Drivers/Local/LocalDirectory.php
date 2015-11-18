@@ -14,8 +14,17 @@ class LocalDirectory extends Directory {
     $paths = [];
     
     foreach(new DirectoryIterator("{$this->driver->getRoot()}/{$this->path}") as $path) {
-      if($path->isDot()) { continue; }
-      $paths[] = $this->driver->get("{$this->path}/$path");
+      if($path->isDot()) {
+        continue;
+      }
+      
+      $full_path = "{$this->path}/$path";
+      
+      if($this->driver->isFile($full_path)) {
+        $paths[] = $this->driver->getFile("{$this->path}/$full_path");
+      } else {
+        $paths[] = $this->driver->getDirectory("{$this->path}/$full_path");
+      }
     }
     
     return $paths;

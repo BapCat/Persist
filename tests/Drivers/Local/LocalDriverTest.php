@@ -1,14 +1,16 @@
 <?php
 
-require_once __DIR__ . '/../../_mocks.php';
+require_once __DIR__ . '/_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
 
 use BapCat\Persist\Directory;
 use BapCat\Persist\File;
 use BapCat\Persist\Drivers\Local\LocalDriver;
+use BapCat\Persist\NotADirectoryException;
+use BapCat\Persist\NotAFileException;
 use BapCat\Persist\PathNotFoundException;
 
-class DriverTest extends PHPUnit_Framework_TestCase {
+class LocalDriverTest extends PHPUnit_Framework_TestCase {
   use FileCreatorTrait;
   
   private $driver;
@@ -22,12 +24,24 @@ class DriverTest extends PHPUnit_Framework_TestCase {
     $this->deleteTestFiles();
   }
   
-  public function testGet() {
-    $file = $this->driver->get($this->filename);
+  public function testGetFile() {
+    $file = $this->driver->getFile($this->filename);
     $this->assertInstanceOf(File::class, $file);
-    
-    $dir = $this->driver->get($this->dirname);
+  }
+  
+  public function testGetFileOnDirectory() {
+    $this->setExpectedException(NotAFileException::class);
+    $file = $this->driver->getFile($this->dirname);
+  }
+  
+  public function testGetDirectory() {
+    $dir = $this->driver->getDirectory($this->dirname);
     $this->assertInstanceOf(Directory::class, $dir);
+  }
+  
+  public function testGetDirectoryOnFile() {
+    $this->setExpectedException(NotADirectoryException::class);
+    $file = $this->driver->getDirectory($this->filename);
   }
   
   public function testIsFile() {

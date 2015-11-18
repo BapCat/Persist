@@ -9,18 +9,33 @@
  */
 abstract class Driver {
   /**
-   * Gets a file or directory from the storage medium
+   * Gets a file from the storage medium
    * 
-   * @param  string  $path   The path of the file
+   * @param   string  $path  The path of the file
    * 
-   * @return File|Directory  Either a File or Directory, depending on the path's type
+   * @return  File    A file object
    */
-  public function get($path) {
+  public function getFile($path) {
     if($this->isDir($path)) {
-      return $this->instantiateDir($path);
+      throw new NotAFileException($path);
     }
     
     return $this->instantiateFile($path);
+  }
+  
+  /**
+   * Gets a directory from the storage medium
+   * 
+   * @param  string     $path  The path of the directory
+   * 
+   * @return Directory  A directory object
+   */
+  public function getDirectory($path) {
+    if($this->isFile($path)) {
+      throw new NotADirectoryException($path);
+    }
+    
+    return $this->instantiateDir($path);
   }
   
   /**
