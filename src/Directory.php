@@ -34,6 +34,12 @@ abstract class Directory extends Path {
    * @return Path    The child of this directory
    */
   protected function getChild($name) {
-    return $this->driver->get($this->path . '/' . $name);
+    $full_path = "{$this->path}/$name";
+    
+    if($this->driver->isDir($full_path)) {
+      return $this->driver->getDirectory($full_path);
+    }
+    
+    return $this->driver->getFile($full_path);
   }
 }
