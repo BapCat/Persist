@@ -51,10 +51,28 @@ abstract class Driver {
    * Creates a Directory representation of a path
    * 
    * @param  string     $path  The path
-   * 
+   *
    * @return Directory  An instance of Directory representing the path
    */
   protected abstract function instantiateDir($path);
+  
+  /**
+   * Create a file
+   *
+   * @param  string     $path  The path
+   *
+   * @return  File
+   */
+  public abstract function createFile($path);
+  
+  /**
+   * Create a directory
+   *
+   * @param  string     $path  The path
+   *
+   * @return  Directory
+   */
+  public abstract function createDirectory($path);
   
   /**
    * Checks if a path is a directory

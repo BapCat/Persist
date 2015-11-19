@@ -167,4 +167,18 @@ class LocalDriverTest extends PHPUnit_Framework_TestCase {
     $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
     $this->assertInternalType('int', $this->driver->modified($file));
   }
+  
+  public function testCreateFile() {
+    $filename = $this->filename . '-test-create-from-driver';
+    $this->driver->createFile($filename);
+    
+    $this->assertTrue(is_file($filename));
+  }
+  
+  public function testCreateDirectory() {
+    $path = 'test-create-from-driver';
+    $dir = $this->driver->createDirectory($path);
+    $this->assertTrue(is_dir($dir->full_path));
+  }
+  
 }

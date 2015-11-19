@@ -26,6 +26,32 @@ class LocalDriver extends Driver {
     return new LocalDirectory($this, $path);
   }
   
+  /**
+   * Create a file
+   *
+   * @param  string     $path  The path
+   *
+   * @return  LocalFile
+   */
+  public function createFile($path) {
+    $localFile = $this->instantiateFile($path);
+    $localFile->create();
+    return $localFile;
+  }
+  
+  /**
+   * Create a directory
+   *
+   * @param  string     $path  The path
+   *
+   * @return  LocalDirectory
+   */
+  public function createDirectory($path) {
+    $localDirectory = $this->instantiateDir($path);
+    $localDirectory->create();
+    return $localDirectory;
+  }
+  
   public function isDir($path) {
     if(!is_string($path)) {
       throw new InvalidArgumentException("[$path] is not a valid path");

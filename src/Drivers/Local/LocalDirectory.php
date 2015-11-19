@@ -10,6 +10,10 @@ class LocalDirectory extends Directory {
     parent::__construct($driver, $path);
   }
   
+  public function create() {
+    mkdir($this->driver->getFullPath($this->path), 0755);
+  }
+  
   protected function loadChildren() {
     $paths = [];
     
@@ -34,4 +38,6 @@ class LocalDirectory extends Directory {
   protected function getFullPath() {
     return $this->driver->getFullPath($this->path);
   }
+  
+  
 }
