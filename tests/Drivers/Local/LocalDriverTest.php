@@ -1,14 +1,16 @@
 <?php
 
-require_once __DIR__ . '/../../_mocks.php';
+require_once __DIR__ . '/_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
 
 use BapCat\Persist\Directory;
 use BapCat\Persist\File;
 use BapCat\Persist\Drivers\Local\LocalDriver;
+use BapCat\Persist\NotADirectoryException;
+use BapCat\Persist\NotAFileException;
 use BapCat\Persist\PathNotFoundException;
 
-class DriverTest extends PHPUnit_Framework_TestCase {
+class LocalDriverTest extends PHPUnit_Framework_TestCase {
   use FileCreatorTrait;
   
   private $driver;
@@ -27,9 +29,19 @@ class DriverTest extends PHPUnit_Framework_TestCase {
     $this->assertInstanceOf(File::class, $file);
   }
   
+  public function testGetFileOnDirectory() {
+    $this->setExpectedException(NotAFileException::class);
+    $file = $this->driver->getFile($this->dirname);
+  }
+  
   public function testGetDirectory() {
     $dir = $this->driver->getDirectory($this->dirname);
     $this->assertInstanceOf(Directory::class, $dir);
+  }
+  
+  public function testGetDirectoryOnFile() {
+    $this->setExpectedException(NotADirectoryException::class);
+    $file = $this->driver->getDirectory($this->filename);
   }
   
   public function testIsFile() {
@@ -143,4 +155,30 @@ class DriverTest extends PHPUnit_Framework_TestCase {
     $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
     $this->driver->size($file);
   }
+  
+  public function testModified() {
+    $file = mockFile($this, $this->driver, $this->filename);
+    $this->assertInternalType('int', $this->driver->modified($file));
+  }
+  
+  public function testModifiedFileDoesntExist() {
+    $this->setExpectedException(PathNotFoundException::class);
+    
+    $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
+    $this->assertInternalType('int', $this->driver->modified($file));
+  }
+  
+  public function testCreateFile() {
+    $filename = $this->filename . '-test-create-from-driver';
+    $this->driver->createFile($filename);
+    
+    $this->assertTrue(is_file($filename));
+  }
+  
+  public function testCreateDirectory() {
+    $path = 'test-create-from-driver';
+    $dir = $this->driver->createDirectory($path);
+    $this->assertTrue(is_dir($dir->full_path));
+  }
+  
 }

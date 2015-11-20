@@ -9,7 +9,7 @@ use BapCat\Propifier\PropifierTrait;
  * @author    Corey Frenette
  * @copyright Copyright (c) 2015, BapCat
  */
-abstract class FileOutputStream {
+abstract class FileWriter {
   use PropifierTrait;
   
   /**

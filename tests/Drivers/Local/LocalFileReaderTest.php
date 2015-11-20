@@ -10,26 +10,34 @@ class LocalFileReaderTest extends PHPUnit_Framework_TestCase {
   private $file_ptr;
   
   public function setUp() {
+    $dir  = __DIR__ . '/storage';
+    $path = '/filereadertest';
+    $full_path = $dir . $path;
+    
     $driver = $this
       ->getMockBuilder(LocalDriver::class)
-      ->setConstructorArgs([__DIR__])
-      ->setMethods()
+      ->setConstructorArgs([$dir])
       ->getMock()
     ;
     
     $this->file = $this
       ->getMockBuilder(LocalFile::class)
-      ->setConstructorArgs([$driver, '/data/filereader'])
-      ->setMethods(['getFullPath'])
+      ->setConstructorArgs([$driver, $path])
+      ->setMethods(['getFullPath', 'getExists'])
       ->getMock()
     ;
     
     $this->file
       ->method('getFullPath')
-      ->willReturn($path)
+      ->willReturn($full_path)
     ;
     
-    $this->file_ptr = fopen($path, 'r');
+    $this->file
+      ->method('getExists')
+      ->willReturn(true)
+    ;
+    
+    $this->file_ptr = fopen($full_path, 'r');
     $this->file_reader = new LocalFileReader($this->file, $this->file_ptr);
   }
   
@@ -42,11 +50,11 @@ class LocalFileReaderTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testGetLength() {
-    $this->assertSame(15, $this->file_reader->length);
+    $this->assertSame(14, $this->file_reader->length);
   }
   
   public function testGetRemaining() {
-    $this->assertSame(15, $this->file_reader->length);
+    $this->assertSame(14, $this->file_reader->length);
   }
   
   public function testGetHasMore() {
@@ -54,11 +62,11 @@ class LocalFileReaderTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testRead() {
-    $this->assertSame(15, $this->file_reader->length);
-    $this->assertSame(15, $this->file_reader->length);
+    $this->assertSame(14, $this->file_reader->length);
+    $this->assertSame(14, $this->file_reader->length);
     $this->assertTrue($this->file_reader->has_more);
     $this->assertSame('This is', $this->file_reader->read(7));
-    $this->assertSame(8, $this->file_reader->remaining);
+    $this->assertSame(7, $this->file_reader->remaining);
     $this->assertTrue($this->file_reader->has_more);
     $this->assertSame(' a test', $this->file_reader->read(7));
     $this->assertSame(0, $this->file_reader->remaining);

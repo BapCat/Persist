@@ -1,4 +1,6 @@
-<?php namespace BapCat\Persist;
+<?php namespace BapCat\Persist\Drivers\Local;
+
+use BapCat\Persist\FileReader;
 
 /**
  * A reader capable of reading LocalFiles
@@ -6,7 +8,7 @@
  * @author    Corey Frenette
  * @copyright Copyright (c) 2015, BapCat
  */
-abstract class FileInputStream {
+class LocalFileReader extends FileReader {
   private $ptr;
   
   /**
@@ -44,7 +46,7 @@ abstract class FileInputStream {
   /**
    * {@inheritdoc}
    */
-  protected abstract function getRemaining() {
+  protected function getRemaining() {
     return $this->length - @ftell($this->ptr);
   }
   

@@ -3,14 +3,14 @@
 use Exception;
 
 /**
- * A path (file or directory) could not be found
+ * The file already exists.
  * 
  * @author    Corey Frenette
  * @copyright Copyright (c) 2015, BapCat
  */
-class PathNotFoundException extends Exception {
+class PathAlreadyExistsException extends Exception {
   /**
-   * The path that could not be found
+   * The path
    * 
    * @var string
    */
@@ -19,17 +19,17 @@ class PathNotFoundException extends Exception {
   /**
    * Constructor
    * 
-   * @param string $path The path that could not be found
+   * @param  string  $path  The path
    */
   public function __construct($path) {
-    parent::__construct("[$path] does not exist");
+    parent::__construct("Path[$path] already exists");
     $this->path = $path;
   }
   
   /**
-   * Gets the path that could not be found
+   * Gets the path
    * 
-   * @return string The path that could not be found
+   * @return  string  The path
    */
   public function getPath() {
     return $this->path;
