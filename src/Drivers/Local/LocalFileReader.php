@@ -40,7 +40,7 @@ class LocalFileReader extends FileReader {
    * {@inheritdoc}
    */
   protected function getHasMore() {
-    return !@feof($this->ptr);
+    return $this->remaining != 0;
   }
   
   /**
