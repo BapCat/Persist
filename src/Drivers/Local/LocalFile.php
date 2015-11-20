@@ -11,6 +11,12 @@ class LocalFile extends File {
     return $this;
   }
   
+  public function read(callable $read) {
+    $ptr = fopen($this->full_path, 'r');
+    $read(new LocalFileInputStream($this, $ptr));
+    fclose($ptr);
+  }
+  
   /* NON-STANDARD METHODS */
   protected function getFullPath() {
     return $this->driver->getFullPath($this->path);

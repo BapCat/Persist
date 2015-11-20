@@ -22,4 +22,11 @@ abstract class File extends Path {
    * @return  File  A File instance that points to the local file
    */
   public abstract function makeLocal();
+  
+  /**
+   * Opens a file for reading
+   * 
+   * @param  callable(FileInputStream)  $read
+   */
+  public abstract function read(callable $read);
 }

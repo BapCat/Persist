@@ -22,11 +22,13 @@ class DriverTest extends PHPUnit_Framework_TestCase {
     $this->deleteTestFiles();
   }
   
-  public function testGet() {
-    $file = $this->driver->get($this->filename);
+  public function testGetFile() {
+    $file = $this->driver->getFile($this->filename);
     $this->assertInstanceOf(File::class, $file);
-    
-    $dir = $this->driver->get($this->dirname);
+  }
+  
+  public function testGetDirectory() {
+    $dir = $this->driver->getDirectory($this->dirname);
     $this->assertInstanceOf(Directory::class, $dir);
   }
   

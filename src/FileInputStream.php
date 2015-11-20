@@ -22,7 +22,7 @@ abstract class FileInputStream {
   /**
    * Constructor
    * 
-   * @param  File  $file  THe file to read from
+   * @param  File  $file  The file to read from
    */
   public function __construct(File $file) {
     if(!$file->exists) {
@@ -42,9 +42,23 @@ abstract class FileInputStream {
   }
   
   /**
+   * Gets the length of the file
+   * 
+   * @return  integer  The length of the file
+   */
+  protected abstract function getLength();
+  
+  /**
+   * Get the number of remaining character
+   * 
+   * @return  integer  The number of remaining characters
+   */
+  protected abstract function getRemaining();
+  
+  /**
    * Checks if the file has data left that hasn't been read yet
    * 
-   * @return string  True if there is more data in the file, false otherwise
+   * @return  string  True if there is more data in the file, false otherwise
    */
   protected abstract function getHasMore();
   
