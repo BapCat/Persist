@@ -24,7 +24,7 @@ class LocalFile extends File {
   
   public function read(callable $read) {
     $ptr = fopen($this->full_path, 'r');
-    $read(new LocalFileInputStream($this, $ptr));
+    $read(new LocalFileReader($this, $ptr));
     fclose($ptr);
   }
   
