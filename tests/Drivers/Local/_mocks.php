@@ -1,8 +1,6 @@
 <?php
 
-use BapCat\Persist\Directory;
 use BapCat\Persist\Driver;
-use BapCat\Persist\File;
 use BapCat\Persist\Drivers\Local\LocalDirectory;
 use BapCat\Persist\Drivers\Local\LocalDriver;
 use BapCat\Persist\Drivers\Local\LocalFile;

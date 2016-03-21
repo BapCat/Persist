@@ -11,7 +11,7 @@ class FileWriterTest extends PHPUnit_Framework_TestCase {
     $driver = mockDriver($this, false);
     $file = mockFile($this, $driver, '');
     
-    $out = mockFileWriter($this, $file);
+    mockFileWriter($this, $file);
   }
   
   public function testProperties() {

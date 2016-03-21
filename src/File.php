@@ -26,7 +26,14 @@ abstract class File extends Path {
   /**
    * Opens a file for reading
    * 
-   * @param  callable(FileInputStream)  $read
+   * @param  callable<FileReader>  $read
    */
   public abstract function read(callable $read);
+  
+  /**
+   * Opens a file for writing
+   * 
+   * @param  callable<FileWriter>  $write
+   */
+  public abstract function write(callable $write);
 }

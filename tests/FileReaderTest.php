@@ -11,7 +11,7 @@ class FileReaderTest extends PHPUnit_Framework_TestCase {
     $driver = mockDriver($this, false);
     $file = mockFile($this, $driver, '');
     
-    $in = mockFileReader($this, $file, 100);
+    mockFileReader($this, $file, 100);
   }
   
   public function testProperties() {

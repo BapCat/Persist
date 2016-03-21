@@ -45,6 +45,8 @@ abstract class FileWriter {
    * Writes an arbitrary block of data to the file
    * 
    * @param  mixed  $data  The data to write to the file
+   * 
+   * @return  int  The number of bytes written
    */
   public abstract function write($data);
 }

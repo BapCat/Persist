@@ -3,7 +3,6 @@
 use BapCat\Persist\Directory;
 
 use DirectoryIterator;
-use FilesystemIterator;
 
 class LocalDirectory extends Directory {
   public function __construct(LocalDriver $driver, $path) {

@@ -31,7 +31,7 @@ class LocalDriverTest extends PHPUnit_Framework_TestCase {
   
   public function testGetFileOnDirectory() {
     $this->setExpectedException(NotAFileException::class);
-    $file = $this->driver->getFile($this->dirname);
+    $this->driver->getFile($this->dirname);
   }
   
   public function testGetDirectory() {
@@ -41,7 +41,7 @@ class LocalDriverTest extends PHPUnit_Framework_TestCase {
   
   public function testGetDirectoryOnFile() {
     $this->setExpectedException(NotADirectoryException::class);
-    $file = $this->driver->getDirectory($this->filename);
+    $this->driver->getDirectory($this->filename);
   }
   
   public function testIsFile() {
