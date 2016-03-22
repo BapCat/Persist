@@ -80,4 +80,8 @@ class LocalFileReaderTest extends PHPUnit_Framework_TestCase {
     $this->assertSame(0, $this->file_reader->remaining);
     $this->assertFalse($this->file_reader->has_more);
   }
+  
+  public function testReadAll() {
+    $this->assertSame('This is a test', $this->file_reader->read());
+  }
 }
