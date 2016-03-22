@@ -14,6 +14,8 @@ class LocalFileReaderTest extends PHPUnit_Framework_TestCase {
     $path = '/filereadertest';
     $full_path = $dir . $path;
     
+    file_put_contents($full_path, 'This is a test');
+    
     $driver = $this
       ->getMockBuilder(LocalDriver::class)
       ->setConstructorArgs([$dir])
