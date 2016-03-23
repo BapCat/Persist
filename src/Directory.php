@@ -1,7 +1,5 @@
 <?php namespace BapCat\Persist;
 
-use ArrayIterator;
-
 /**
  * Defines a directory in a persistent filesystem
  *
