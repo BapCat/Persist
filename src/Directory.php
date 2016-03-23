@@ -26,15 +26,6 @@ abstract class Directory extends Path {
   }
   
   /**
-   * Allows iteration over the children of this directory
-   *
-   * @return ArrayIterator  An array iterator for the children of this directory
-   */
-  protected function itrChildren() {
-    return new ArrayIterator($this->loadChildren());
-  }
-  
-  /**
    * Gets a child of this directory
    *
    * @param  string  $name  The name of the child to get
