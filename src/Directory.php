@@ -1,7 +1,9 @@
 <?php namespace BapCat\Persist;
 
+use ArrayIterator;
+
 /**
- * Defines a directory in a presistent filesystem
+ * Defines a directory in a persistent filesystem
  *
  * @author    Corey Frenette
  * @copyright Copyright (c) 2015, BapCat
@@ -21,6 +23,15 @@ abstract class Directory extends Path {
    */
   protected function getChildren() {
     return $this->loadChildren();
+  }
+  
+  /**
+   * Allows iteration over the children of this directory
+   *
+   * @return ArrayIterator  An array iterator for the children of this directory
+   */
+  protected function itrChildren() {
+    return new ArrayIterator($this->loadChildren());
   }
   
   /**
