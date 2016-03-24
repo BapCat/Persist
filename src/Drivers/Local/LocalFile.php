@@ -5,7 +5,7 @@ use BapCat\Persist\PathAlreadyExistsException;
 
 /**
  * A file residing on a local filesystem
- * 
+ *
  * @author    Corey Frenette
  * @copyright Copyright (c) 2015, BapCat
  */
@@ -54,11 +54,18 @@ class LocalFile extends File {
     fclose($ptr);
   }
   
+  /**
+   * {@inheritDoc}
+   */
+  public function delete() {
+    return unlink($this->full_path);
+  }
+  
   /* NON-STANDARD METHODS */
   
   /**
    * Returns the full path of this file on the local filesystem
-   * 
+   *
    * @return  string  The full path of this file
    */
   protected function getFullPath() {

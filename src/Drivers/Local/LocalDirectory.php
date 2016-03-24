@@ -16,7 +16,7 @@ class LocalDirectory extends Directory {
   protected function loadChildren() {
     $paths = [];
     
-    foreach(new DirectoryIterator("{$this->driver->getRoot()}/{$this->path}") as $path) {
+    foreach(new DirectoryIterator($this->full_path) as $path) {
       if($path->isDot()) {
         continue;
       }
@@ -24,19 +24,30 @@ class LocalDirectory extends Directory {
       $full_path = "{$this->path}/$path";
       
       if($this->driver->isFile($full_path)) {
-        $paths[] = $this->driver->getFile("{$this->path}/$full_path");
+        $paths[] = $this->driver->getFile($full_path);
       } else {
-        $paths[] = $this->driver->getDirectory("{$this->path}/$full_path");
+        $paths[] = $this->driver->getDirectory($full_path);
       }
     }
     
     return $paths;
   }
   
+  /**
+   * {@inheritDoc}
+   */
+  public function delete() {
+    foreach($this->children as $child) {
+      if(!$child->delete()) {
+        return false;
+      }
+    }
+    
+    return rmdir($this->full_path);
+  }
+  
   /* NON-STANDARD METHODS */
   protected function getFullPath() {
     return $this->driver->getFullPath($this->path);
   }
-  
-  
 }

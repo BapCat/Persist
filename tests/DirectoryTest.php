@@ -11,6 +11,28 @@ class DirectoryTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(['a', 'b'], $dir->children);
   }
   
+  public function testGetChildren() {
+    $dirname = 'test';
+    $driver = mockDirDriver($this, $dirname);
+    $dir = mockDir($this, $driver, $dirname);
+    
+    $this->assertSame(['a', 'b'], $dir->children);
+  }
+  
+  public function testItrChildren() {
+    $dirname = 'test';
+    $driver = mockDirDriver($this, $dirname);
+    $dir = mockDir($this, $driver, $dirname);
+    
+    $files = [];
+    
+    foreach($dir->children as $child) {
+      $files[] = $child;
+    }
+    
+    $this->assertSame(['a', 'b'], $files);
+  }
+  
   public function testGetChild() {
     $dirname = 'test';
     $driver = mockDirDriver($this, $dirname);

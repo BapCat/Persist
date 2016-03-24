@@ -1,7 +1,7 @@
 <?php namespace BapCat\Persist;
 
 /**
- * Defines a directory in a presistent filesystem
+ * Defines a directory in a persistent filesystem
  *
  * @author    Corey Frenette
  * @copyright Copyright (c) 2015, BapCat

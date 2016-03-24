@@ -4,7 +4,7 @@ use BapCat\Propifier\PropifierTrait;
 
 /**
  * Defines a basic element of a filesystem, which may be a file or directory
- * 
+ *
  * @author    Corey Frenette
  * @copyright Copyright (c) 2015, BapCat
  */
@@ -13,28 +13,28 @@ abstract class Path {
   
   /**
    * The filesystem driver
-   * 
+   *
    * @var Driver
    */
   private $driver;
   
   /**
    * The path of this file or directory
-   * 
+   *
    * @var string
    */
   private $path;
   
   /**
    * The name of this file or directory
-   * 
+   *
    * @var string
    */
   private $name;
   
   /**
    * Constructor
-   * 
+   *
    * @param  Driver  $driver  The filesystem driver this file or directory belongs to
    * @param  string  $path    The path of this file or directory
    */
@@ -47,7 +47,7 @@ abstract class Path {
   
   /**
    * Gets a string representation of this file or directory to a
-   * 
+   *
    * @return  string  A string representation of this file or directory
    */
   public function __toString() {
@@ -57,7 +57,7 @@ abstract class Path {
   
   /**
    * Gets the driver of this file or directory
-   * 
+   *
    * @return  Driver  The driver
    */
   protected function getDriver() {
@@ -66,7 +66,7 @@ abstract class Path {
   
   /**
    * Gets the path of this file or directory
-   * 
+   *
    * @return  string  The path
    */
   protected function getPath() {
@@ -75,7 +75,7 @@ abstract class Path {
   
   /**
    * Gets the name of this file or directory
-   * 
+   *
    * @return  string  The name
    */
   protected function getName() {
@@ -84,7 +84,7 @@ abstract class Path {
   
   /**
    * Checks if this file or directory exists
-   * 
+   *
    * @return  boolean  True if the file or directory exists, false otherwise
    */
   protected function getExists() {
@@ -93,7 +93,7 @@ abstract class Path {
   
   /**
    * Checks if this file or directory is a symlink
-   * 
+   *
    * @return  boolean  True if the file or directory is a symlink, false otherwise
    */
   protected function getIsLink() {
@@ -102,7 +102,7 @@ abstract class Path {
   
   /**
    * Checks if this file or directory is readable
-   * 
+   *
    * @return  boolean  True if the file or directory is readable, false otherwise
    */
   protected function getIsReadable() {
@@ -111,7 +111,7 @@ abstract class Path {
   
   /**
    * Checks if this file or directory is writable
-   * 
+   *
    * @return  boolean  True if the file or directory is writable, false otherwise
    */
   protected function getIsWritable() {
@@ -120,10 +120,17 @@ abstract class Path {
   
   /**
    * Checks the last time this file or directory was modified
-   * 
+   *
    * @return  DateTime  The last modified time
    */
   protected function getModified() {
     return $this->driver->modified($this);
   }
+  
+  /**
+   * Deletes this file or directory
+   *
+   * @return  boolean  True on success, false otherwise
+   */
+  public abstract function delete();
 }
