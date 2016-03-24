@@ -109,6 +109,9 @@ class LocalDriverTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($this->driver->isReadable($file));
   }
   
+  /**
+   * @requires OS Linux
+   */
   public function testFileIsNotReadable() {
     $file = mockFile($this, $this->driver, $this->writeonly);
     $this->assertFalse($this->driver->isReadable($file));
@@ -119,6 +122,9 @@ class LocalDriverTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($this->driver->isReadable($dir));
   }
   
+  /**
+   * @requires OS Linux
+   */
   public function testDirIsNotReadable() {
     $dir = mockDir($this, $this->driver, $this->writedir);
     $this->assertFalse($this->driver->isReadable($dir));
@@ -139,6 +145,9 @@ class LocalDriverTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($this->driver->isWritable($dir));
   }
   
+  /**
+   * @requires OS Linux
+   */
   public function testDirIsNotWritable() {
     $dir = mockDir($this, $this->driver, $this->readdir);
     $this->assertFalse($this->driver->isWritable($dir));
