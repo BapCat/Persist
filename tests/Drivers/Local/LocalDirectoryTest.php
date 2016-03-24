@@ -32,8 +32,9 @@ class LocalDirectoryTest extends PHPUnit_Framework_TestCase {
   public function testDelete() {
     $directory = new LocalDirectory($this->driver, basename($this->datadir));
     
-    // Make the read-only file readable so it can be deleted
-    chmod($directory->child['read']->full_path, 0755);
+    // Make the read-only stuff readable so it can be deleted
+    chmod($this->readonly, 0755);
+    chmod($this->readdir,  0755);
     
     $this->assertTrue($directory->delete());
     $this->assertFalse(file_exists($directory->full_path));
