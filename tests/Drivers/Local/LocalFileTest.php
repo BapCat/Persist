@@ -41,9 +41,12 @@ class LocalFileTest extends PHPUnit_Framework_TestCase {
     
     $file = new LocalFile($this->driver, $filename);
     
-    $file->read(function(LocalFileReader $reader) {
-      $this->assertTrue(true);
+    $read = false;
+    $file->read(function(LocalFileReader $reader) use(&$read) {
+      $read = true;
     });
+    
+    $this->assertTrue($read);
   }
   
   public function testWrite() {
@@ -52,9 +55,12 @@ class LocalFileTest extends PHPUnit_Framework_TestCase {
     
     $file = new LocalFile($this->driver, $filename);
     
-    $file->write(function(LocalFileWriter $reader) {
-      $this->assertTrue(true);
+    $written = false;
+    $file->write(function(LocalFileWriter $reader) use(&$written) {
+      $written = true;
     });
+    
+    $this->assertTrue($written);
   }
   
   public function testCreate() {
