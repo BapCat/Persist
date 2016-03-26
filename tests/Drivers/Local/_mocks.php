@@ -6,7 +6,11 @@ use BapCat\Persist\Drivers\Local\LocalDriver;
 use BapCat\Persist\Drivers\Local\LocalFile;
 
 function mockLocalDriver(PHPUnit_Framework_TestCase $testcase, $root) {
-  $driver = $testcase->getMockForAbstractClass(LocalDriver::class, [$root]);
+  $driver = $testcase->getMockBuilder(LocalDriver::class)
+    ->setConstructorArgs([$root])
+    ->setMethods(['instantiateFile', 'instantiateDir'])
+    ->getMockForAbstractClass()
+  ;
   
   $driver
     ->method('instantiateFile')
