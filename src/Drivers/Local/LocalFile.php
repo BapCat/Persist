@@ -46,12 +46,40 @@ class LocalFile extends File {
   }
   
   /**
+   * {@inheritDoc}
+   */
+  public function readAll() {
+    $contents = @file_get_contents($this->full_path);
+    
+    if($contents === false) {
+      //@TODO
+      throw new \Exception("Error reading file contents [{$this->full_path}]");
+    }
+    
+    return $contents;
+  }
+  
+  /**
    * {@inheritdoc}
    */
   public function write(callable $write) {
     $ptr = fopen($this->full_path, 'a');
     $write(new LocalFileWriter($this, $ptr));
     fclose($ptr);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public function writeAll($contents) {
+    $written = @file_put_contents($this->full_path, $contents);
+    
+    if($written === false) {
+      //@TODO
+      throw new \Exception("Error writing file contents [{$this->full_path}]");
+    }
+    
+    return $written;
   }
   
   /**
