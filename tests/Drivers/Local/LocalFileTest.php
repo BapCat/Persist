@@ -49,6 +49,27 @@ class LocalFileTest extends PHPUnit_Framework_TestCase {
     $this->assertTrue($read);
   }
   
+  public function testReadAll() {
+    $filename = "{$this->filename}-readall";
+    $contents = 'this is a test';
+    
+    file_put_contents($filename, $contents);
+    
+    $file = new LocalFile($this->driver, $filename);
+    
+    $this->assertSame($contents, $file->readAll());
+  }
+  
+  /**
+   * @expectedException Exception
+   */
+  public function testReadAllFailure() {
+    $filename = "{$this->filename}-readall-nope";
+    
+    $file = new LocalFile($this->driver, $filename);
+    $file->readAll();
+  }
+  
   public function testWrite() {
     $filename = "{$this->filename}-new-write";
     touch($filename);
@@ -61,6 +82,27 @@ class LocalFileTest extends PHPUnit_Framework_TestCase {
     });
     
     $this->assertTrue($written);
+  }
+  
+  public function testWriteAll() {
+    $filename = "{$this->filename}-writeall";
+    $contents = 'this is a test';
+    
+    $file = new LocalFile($this->driver, $filename);
+    $file->writeAll($contents);
+    
+    $this->assertSame($contents, file_get_contents($filename));
+  }
+  
+  /**
+   * @expectedException Exception
+   */
+  public function testWriteAllFailure() {
+    $filename = "dirdoesnotexist/{$this->filename}-writeall";
+    $contents = 'this is a test';
+    
+    $file = new LocalFile($this->driver, $filename);
+    $file->writeAll($contents);
   }
   
   public function testCreate() {
