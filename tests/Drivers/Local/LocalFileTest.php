@@ -110,6 +110,34 @@ class LocalFileTest extends PHPUnit_Framework_TestCase {
     $localFile->create();
   }
   
+  public function testMove() {
+    $to_move = new LocalFile($this->driver, "{$this->filename}-to-move");
+    $moved   = new LocalFile($this->driver, "{$this->filename}-moved");
+    
+    $this->assertFalse($moved->exists);
+    
+    $to_move->create();
+    
+    $this->assertTrue($to_move->move($moved));
+    
+    $this->assertFalse($to_move->exists);
+    $this->assertTrue($moved->exists);
+  }
+  
+  public function testCopy() {
+    $to_copy = new LocalFile($this->driver, "{$this->filename}-to-copy");
+    $copied  = new LocalFile($this->driver, "{$this->filename}-copied");
+    
+    $this->assertFalse($copied->exists);
+    
+    $to_copy->create();
+    
+    $this->assertTrue($to_copy->copy($copied));
+    
+    $this->assertTrue($to_copy->exists);
+    $this->assertTrue($copied->exists);
+  }
+  
   public function testDelete() {
     $filename = "{$this->filename}-new-delete";
     touch($filename);

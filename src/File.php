@@ -52,4 +52,22 @@ abstract class File extends Path {
    * @return  integer  The length of the data written
    */
   public abstract function writeAll($contents);
+  
+  /**
+   * Moves a file to a new location
+   *
+   * @param  File  $dest  Where to move the file
+   *
+   * @return  boolean  True on success, false otherwise
+   */
+  public abstract function move(File $dest);
+  
+  /**
+   * Copies a file to a new location
+   *
+   * @param  File  $dest  Where to copy the file
+   *
+   * @return  boolean  True on success, false otherwise
+   */
+  public abstract function copy(File $dest);
 }

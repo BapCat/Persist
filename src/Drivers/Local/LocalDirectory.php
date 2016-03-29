@@ -36,6 +36,36 @@ class LocalDirectory extends Directory {
   /**
    * {@inheritDoc}
    */
+  public function move(Directory $dest) {
+    return rename($this->full_path, $dest->full_path);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public function copy(Directory $dest) {
+    if(!$dest->exists) {
+      $dest->create();
+    }
+    
+    foreach($this->children as $child) {
+      if($child instanceof Directory) {
+        $path = $this->driver->getDirectory($dest->path . '/' . $child->name);
+      } else {
+        $path = $this->driver->getFile($dest->path . '/' . $child->name);
+      }
+      
+      if(!$child->copy($path)) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
   public function delete() {
     foreach($this->children as $child) {
       if(!$child->delete()) {

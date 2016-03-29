@@ -39,4 +39,22 @@ abstract class Directory extends Path {
     
     return $this->driver->getFile($full_path);
   }
+  
+  /**
+   * Moves a directory to a new location
+   *
+   * @param  Directory  $dest  Where to move the directory
+   *
+   * @return  boolean  True on success, false otherwise
+   */
+  public abstract function move(Directory $dest);
+  
+  /**
+   * Copies a directory to a new location
+   *
+   * @param  Directory  $dest  Where to copy the file
+   *
+   * @return  boolean  True on success, false otherwise
+   */
+  public abstract function copy(Directory $dest);
 }

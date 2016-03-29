@@ -21,7 +21,7 @@ class LocalFile extends File {
    * {@inheritdoc}
    */
   public function create() {
-    if ( $this->driver->exists($this) ) {
+    if($this->driver->exists($this)) {
       throw new PathAlreadyExistsException($this->path);
     }
     
@@ -80,6 +80,20 @@ class LocalFile extends File {
     }
     
     return $written;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public function move(File $dest) {
+    return rename($this->full_path, $dest->full_path);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public function copy(File $dest) {
+    return copy($this->full_path, $dest->full_path);
   }
   
   /**
