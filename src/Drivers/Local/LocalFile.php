@@ -86,6 +86,8 @@ class LocalFile extends File {
       throw new \Exception("Error creating temp file");
     }
     
+    chmod($temp, 0666 & ~umask());
+    
     $written = @file_put_contents($temp, $contents);
     
     if($written === false) {
