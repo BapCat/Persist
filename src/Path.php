@@ -83,6 +83,15 @@ abstract class Path {
   }
   
   /**
+   * Gets the parent directory of this file or directory
+   *
+   * @return  Directory  The parent
+   */
+  protected function getParent() {
+    return $this->driver->getDirectory(dirname($this->path));
+  }
+  
+  /**
    * Checks if this file or directory exists
    *
    * @return  boolean  True if the file or directory exists, false otherwise
