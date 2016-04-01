@@ -95,7 +95,12 @@ class LocalFile extends File {
       throw new \Exception("Error writing file contents [{$this->full_path}]");
     }
     
-    rename($temp, $this->full_path);
+    $renamed = rename($temp, $this->full_path);
+    
+    if($renamed === false) {
+        //@TODO
+        throw new \Exception("Error while renaming [$temp] to [{$this->full_path}]");
+    }
     
     return $written;
   }
