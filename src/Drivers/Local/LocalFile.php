@@ -72,12 +72,28 @@ class LocalFile extends File {
    * {@inheritDoc}
    */
   public function writeAll($contents) {
-    $written = @file_put_contents($this->full_path, $contents);
+    $parent = $this->parent;
+    
+    if(!$parent->exists) {
+      //@TODO
+      throw new \Exception("Paren't doesn't exist");
+    }
+    
+    $temp = tempnam($parent->full_path, '');
+    
+    if($temp === false) {
+      //@TODO
+      throw new \Exception("Error creating temp file");
+    }
+    
+    $written = @file_put_contents($temp, $contents);
     
     if($written === false) {
       //@TODO
       throw new \Exception("Error writing file contents [{$this->full_path}]");
     }
+    
+    rename($temp, $this->full_path);
     
     return $written;
   }
