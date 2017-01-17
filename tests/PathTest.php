@@ -1,13 +1,15 @@
 <?php
 
-require_once __DIR__ . '/_mocks.php';
+require_once __DIR__ . '/MocksTrait.php';
 
 class PathTest extends PHPUnit_Framework_TestCase {
+  use MocksTrait;
+  
   public function testProperties() {
-    $driver = mockDriver($this);
+    $driver = $this->mockDriver();
     $filename = 'test/a';
     
-    $path = mockPath($this, $driver, $filename);
+    $path = $this->mockPath($driver, $filename);
     
     $this->assertEquals($driver, $path->driver);
     $this->assertEquals($filename, $path->path);

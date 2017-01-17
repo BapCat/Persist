@@ -1,14 +1,16 @@
 <?php
 
-require_once __DIR__ . '/_mocks.php';
+require_once __DIR__ . '/MocksTrait.php';
 
 use BapCat\Persist\File;
 use BapCat\Persist\Directory;
 
 class DriverTest extends PHPUnit_Framework_TestCase {
+  use MocksTrait;
+  
   public function testGetFile() {
     $filename = 'test';
-    $driver = mockFileDriver($this, $filename);
+    $driver = $this->mockFileDriver($filename);
     
     $dir = $driver->getFile($filename);
     
@@ -17,7 +19,7 @@ class DriverTest extends PHPUnit_Framework_TestCase {
   
   public function testGetDirectory() {
     $dirname = 'test';
-    $driver = mockDirDriver($this, $dirname);
+    $driver = $this->mockDirDriver($dirname);
     
     $dir = $driver->getDirectory($dirname);
     

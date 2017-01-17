@@ -1,19 +1,20 @@
 <?php
 
-require_once __DIR__ . '/_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
+require_once __DIR__ . '/LocalMocksTrait.php';
 
 use BapCat\Persist\Drivers\Local\LocalDirectory;
 use BapCat\Persist\Drivers\Local\LocalFile;
 
 class LocalDirectoryTest extends PHPUnit_Framework_TestCase {
   use FileCreatorTrait;
+  use LocalMocksTrait;
   
   private $driver;
   
   public function setUp() {
     $this->createTestFiles();
-    $this->driver = mockLocalDriver($this, dirname($this->datadir));
+    $this->driver = $this->mockLocalDriver(dirname($this->datadir));
   }
   
   public function tearDown() {
@@ -28,6 +29,14 @@ class LocalDirectoryTest extends PHPUnit_Framework_TestCase {
     foreach($children as $child) {
       $this->assertTrue(in_array($child->name, $expected));
     }
+  }
+  
+  public function testGlob() {
+    $directory = new LocalDirectory($this->driver, basename($this->datadir));
+    $children = $directory->children('write*');
+    $expected = ['write', 'writedir'];
+    
+    $this->assertSame(array_map(function($path) { return $path->name; }, iterator_to_array($children)), $expected);
   }
   
   public function testMoveEmptyDir() {

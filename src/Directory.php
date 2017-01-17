@@ -9,18 +9,31 @@
 abstract class Directory extends Path {
   /**
    * Loads the children of this directory
-   *
-   * @return array<Path>  An array containing the children of this directory
+   * 
+   * @param  string  $glob  (optional)
+   * 
+   * @return  array<Path>  An array containing the children of this directory
    */
-  protected abstract function loadChildren();
+  protected abstract function loadChildren($glob = '*');
   
   /**
    * Gets the children of this directory
-   *
-   * @return array<Path>  An array containing the children of this directory
+   * 
+   * @return  array<Path>  An array containing the children of this directory
    */
   protected function getChildren() {
     return $this->loadChildren();
+  }
+  
+  /**
+   * Gets the children of this directory (with glob support)
+   * 
+   * @param  string  $glob  (optional)
+   * 
+   * @return  array<Path>  An array containing the children of this directory
+   */
+  public function children($glob = '*') {
+    return $this->loadChildren($glob);
   }
   
   /**

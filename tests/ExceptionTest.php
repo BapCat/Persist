@@ -6,7 +6,6 @@ use BapCat\Persist\NotAFileException;
 use BapCat\Persist\PathNotFoundException;
 
 class ExceptionTest extends PHPUnit_Framework_TestCase {
-
   public function setUp() {
     $this->path = '/test';
   }
@@ -30,5 +29,4 @@ class ExceptionTest extends PHPUnit_Framework_TestCase {
     $notADirectory = new PathAlreadyExistsException($this->path);
     $this->assertEquals($this->path, $notADirectory->getPath());
   }
-
 }

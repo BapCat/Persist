@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
+require_once __DIR__ . '/LocalMocksTrait.php';
 
 use BapCat\Persist\Drivers\Local\LocalFile;
 use BapCat\Persist\PathAlreadyExistsException;
@@ -10,12 +10,13 @@ use BapCat\Persist\Drivers\Local\LocalFileWriter;
 
 class LocalFileTest extends PHPUnit_Framework_TestCase {
   use FileCreatorTrait;
+  use LocalMocksTrait;
   
   private $driver;
   
   public function setUp() {
     $this->createTestFiles();
-    $this->driver = mockLocalDriver($this, $this->datadir);
+    $this->driver = $this->mockLocalDriver($this->datadir);
   }
   
   public function tearDown() {
