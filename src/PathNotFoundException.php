@@ -10,16 +10,12 @@ use Exception;
  */
 class PathNotFoundException extends Exception {
   /**
-   * The path that could not be found
-   * 
-   * @var string
+   * @var  string
    */
   private $path;
   
   /**
-   * Constructor
-   * 
-   * @param string $path The path that could not be found
+   * @param  string  $path
    */
   public function __construct($path) {
     parent::__construct("[$path] does not exist");
@@ -27,9 +23,7 @@ class PathNotFoundException extends Exception {
   }
   
   /**
-   * Gets the path that could not be found
-   * 
-   * @return string The path that could not be found
+   * @return  string
    */
   public function getPath() {
     return $this->path;

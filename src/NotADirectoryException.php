@@ -10,26 +10,20 @@ use Exception;
  */
 class NotADirectoryException extends Exception {
   /**
-   * The path
-   * 
-   * @var string
+   * @var  string
    */
   private $path;
   
   /**
-   * Constructor
-   * 
-   * @param  string  $path  The path
+   * @param  string  $path
    */
   public function __construct($path) {
-    parent::__construct("[$path] exists, but is not a directory");
+    parent::__construct("[$path] is not a directory");
     $this->path = $path;
   }
   
   /**
-   * Gets the path
-   * 
-   * @return  string  The path
+   * @return  string
    */
   public function getPath() {
     return $this->path;

@@ -1,73 +1,42 @@
 <?php namespace BapCat\Persist;
 
-/**
- * Defines a directory in a persistent filesystem
- *
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
- */
-abstract class Directory extends Path {
-  /**
-   * Loads the children of this directory
-   * 
-   * @param  string  $glob  (optional)
-   * 
-   * @return  array<Path>  An array containing the children of this directory
-   */
-  protected abstract function loadChildren($glob = '*');
-  
-  /**
-   * Gets the children of this directory
-   * 
-   * @return  array<Path>  An array containing the children of this directory
-   */
-  protected function getChildren() {
-    return $this->loadChildren();
-  }
-  
-  /**
-   * Gets the children of this directory (with glob support)
-   * 
-   * @param  string  $glob  (optional)
-   * 
-   * @return  array<Path>  An array containing the children of this directory
-   */
-  public function children($glob = '*') {
-    return $this->loadChildren($glob);
-  }
-  
-  /**
-   * Gets a child of this directory
-   *
-   * @param  string  $name  The name of the child to get
-   *
-   * @return Path    The child of this directory
-   */
-  protected function getChild($name) {
-    $full_path = "{$this->path}/$name";
-    
-    if($this->driver->isDir($full_path)) {
-      return $this->driver->getDirectory($full_path);
+class Directory extends Path {
+  public function create($mode = 0777) {
+    if($this->exists) {
+      throw new PathAlreadyExistsException($this->path);
     }
     
-    return $this->driver->getFile($full_path);
+    mkdir($this->path, $mode, false, $this->context);
+    
+    return $this;
+  }
+  
+  protected function getFile($child) {
+    return $this->driver->file("{$this->path}$child");
+  }
+  
+  protected function getDir($child) {
+    return $this->driver->dir("{$this->path}$child");
+  }
+  
+  protected function getChild($child) {
+    return $this->driver->get("{$this->path}$child");
+  }
+  
+  protected function getChildren() {
+    return new PathCollection($this, $this->context);
   }
   
   /**
-   * Moves a directory to a new location
-   *
-   * @param  Directory  $dest  Where to move the directory
-   *
-   * @return  boolean  True on success, false otherwise
+   * Deletes this directory
+   * 
+   * @return  bool  True on success, false otherwise
    */
-  public abstract function move(Directory $dest);
-  
-  /**
-   * Copies a directory to a new location
-   *
-   * @param  Directory  $dest  Where to copy the file
-   *
-   * @return  boolean  True on success, false otherwise
-   */
-  public abstract function copy(Directory $dest);
+  public function delete() {
+    if(!$this->children->delete()) {
+      return false;
+    }
+    
+    return rmdir($this->path, $this->context);
+  }
 }

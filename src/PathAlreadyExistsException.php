@@ -2,24 +2,14 @@
 
 use Exception;
 
-/**
- * The file already exists.
- * 
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
- */
 class PathAlreadyExistsException extends Exception {
   /**
-   * The path
-   * 
    * @var string
    */
   private $path;
   
   /**
-   * Constructor
-   * 
-   * @param  string  $path  The path
+   * @param  string  $path
    */
   public function __construct($path) {
     parent::__construct("Path[$path] already exists");
@@ -27,9 +17,7 @@ class PathAlreadyExistsException extends Exception {
   }
   
   /**
-   * Gets the path
-   * 
-   * @return  string  The path
+   * @return  string
    */
   public function getPath() {
     return $this->path;

@@ -49,13 +49,15 @@ trait MocksTrait {
   public function mockDriver($exists = true) {
     $driver = $this
       ->getMockBuilder(Driver::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['exists'])
       ->getMockForAbstractClass();
     
     $driver
       ->method('exists')
       ->willReturn($exists);
     
-    $driver
+    /*$driver
       ->method('size')
       ->willReturn(100);
     
@@ -74,12 +76,13 @@ trait MocksTrait {
     $driver
       ->method('modified')
       ->willReturn(0);
+    */
     
     return $driver;
   }
 
   public function mockPath(Driver $driver, $filename) {
-    $path = $this->getMockForAbstractClass(Path::class, [$driver, $filename]);
+    $path = $this->getMockForAbstractClass(Path::class, [$driver, null, $filename]);
     return $path;
   }
 

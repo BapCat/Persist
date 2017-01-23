@@ -2,53 +2,43 @@
 
 use BapCat\Propifier\PropifierTrait;
 
-/**
- * Defines a basic element of a filesystem, which may be a file or directory
- *
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
- */
 abstract class Path {
   use PropifierTrait;
   
   /**
-   * The filesystem driver
-   *
-   * @var Driver
+   * @var  Driver
    */
-  private $driver;
+  protected $driver;
   
   /**
-   * The path of this file or directory
-   *
-   * @var string
+   * @var  resource
+   */
+  protected $context;
+  
+  /**
+   * @var  string  The full path
    */
   private $path;
   
   /**
-   * The name of this file or directory
-   *
-   * @var string
+   * @var  string  The filename only
    */
   private $name;
   
   /**
-   * Constructor
-   *
-   * @param  Driver  $driver  The filesystem driver this file or directory belongs to
-   * @param  string  $path    The path of this file or directory
+   * @param  Driver   $driver
+   * @param  context  $context
+   * @param  string   $path
    */
-  public function __construct(Driver $driver, $path) {
-    $this->driver = $driver;
-    $this->path   = $path;
-    
-    $this->name = basename($path);
+  public function __construct(Driver $driver, $context, $path) {
+    $this->driver  = $driver;
+    $this->context = $context;
+    $this->path    = $path;
+    $this->name    = basename($path);
   }
   
   /**
-   * Gets a string representation of this file or directory to a
-   *
-   * @return  string  A string representation of this file or directory
+   * @return  string  A string representation of this path
    */
   public function __toString() {
     $class = basename(get_class());
@@ -56,17 +46,6 @@ abstract class Path {
   }
   
   /**
-   * Gets the driver of this file or directory
-   *
-   * @return  Driver  The driver
-   */
-  protected function getDriver() {
-    return $this->driver;
-  }
-  
-  /**
-   * Gets the path of this file or directory
-   *
    * @return  string  The path
    */
   protected function getPath() {
@@ -74,8 +53,6 @@ abstract class Path {
   }
   
   /**
-   * Gets the name of this file or directory
-   *
    * @return  string  The name
    */
   protected function getName() {
@@ -83,63 +60,54 @@ abstract class Path {
   }
   
   /**
-   * Gets the parent directory of this file or directory
-   *
-   * @return  Directory  The parent
+   * @return  Directory
    */
   protected function getParent() {
-    return $this->driver->getDirectory(dirname($this->path));
+    return $this->driver->directory(dirname($this->path));
   }
   
   /**
-   * Checks if this file or directory exists
-   *
-   * @return  boolean  True if the file or directory exists, false otherwise
+   * @return  bool  Whether or not this path exists
    */
   protected function getExists() {
-    return $this->driver->exists($this);
+    return $this->driver->exists($this->path);
   }
   
   /**
-   * Checks if this file or directory is a symlink
-   *
-   * @return  boolean  True if the file or directory is a symlink, false otherwise
-   */
-  protected function getIsLink() {
-    return $this->driver->isLink($this);
-  }
-  
-  /**
-   * Checks if this file or directory is readable
-   *
-   * @return  boolean  True if the file or directory is readable, false otherwise
+   * @return  bool  True if the path is readable
    */
   protected function getIsReadable() {
-    return $this->driver->isReadable($this);
+    throw new \Exception();
   }
   
   /**
-   * Checks if this file or directory is writable
-   *
-   * @return  boolean  True if the file or directory is writable, false otherwise
+   * @return  bool  True if the path is writable
    */
   protected function getIsWritable() {
-    return $this->driver->isWritable($this);
+    throw new \Exception();
   }
   
   /**
-   * Checks the last time this file or directory was modified
-   *
    * @return  DateTime  The last modified time
    */
   protected function getModified() {
     return $this->driver->modified($this);
   }
   
+  public function move(Path $dest) {
+    //TODO
+  }
+  
+  public function copy(Path $dest) {
+    //TODO
+  }
+  
   /**
-   * Deletes this file or directory
+   * Deletes this path
    *
-   * @return  boolean  True on success, false otherwise
+   * @return  bool  True on success, false otherwise
    */
-  public abstract function delete();
+  public function delete() {
+    return unlink($this->path, $this->context);
+  }
 }
