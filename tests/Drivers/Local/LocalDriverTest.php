@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
@@ -9,185 +9,187 @@ use BapCat\Persist\Drivers\Local\LocalDriver;
 use BapCat\Persist\NotADirectoryException;
 use BapCat\Persist\NotAFileException;
 use BapCat\Persist\PathNotFoundException;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Constraint\IsType;
+use PHPUnit\Framework\TestCase;
 
-class LocalDriverTest extends PHPUnit_Framework_TestCase {
+class LocalDriverTest extends TestCase {
   use FileCreatorTrait;
-  
+
+  /** @var  LocalDriver  $driver */
   private $driver;
-  
-  public function setUp() {
+
+  public function setUp(): void {
+    parent::setUp();
     $this->createTestFiles();
     $this->driver = new LocalDriver($this->datadir);
   }
-  
-  public function tearDown() {
+
+  public function tearDown(): void {
+    parent::tearDown();
     $this->deleteTestFiles();
   }
-  
-  public function testGetFile() {
+
+  public function testGetFile(): void {
     $file = $this->driver->getFile($this->filename);
-    $this->assertInstanceOf(File::class, $file);
+    Assert::assertInstanceOf(File::class, $file);
   }
-  
-  public function testGetFileOnDirectory() {
-    $this->setExpectedException(NotAFileException::class);
+
+  public function testGetFileOnDirectory(): void {
+    $this->expectException(NotAFileException::class);
     $this->driver->getFile($this->dirname);
   }
-  
-  public function testGetDirectory() {
+
+  public function testGetDirectory(): void {
     $dir = $this->driver->getDirectory($this->dirname);
-    $this->assertInstanceOf(Directory::class, $dir);
+    Assert::assertInstanceOf(Directory::class, $dir);
   }
-  
-  public function testGetDirectoryOnFile() {
-    $this->setExpectedException(NotADirectoryException::class);
+
+  public function testGetDirectoryOnFile(): void {
+    $this->expectException(NotADirectoryException::class);
     $this->driver->getDirectory($this->filename);
   }
-  
-  public function testIsFile() {
-    $this->assertTrue ($this->driver->isFile($this->filename));
-    $this->assertFalse($this->driver->isFile($this->dirname));
+
+  public function testIsFile(): void {
+    Assert::assertTrue ($this->driver->isFile($this->filename));
+    Assert::assertFalse($this->driver->isFile($this->dirname));
   }
-  
-  public function testIsFileWithInvalidPath() {
-    $this->setExpectedException(InvalidArgumentException::class);
-    $this->driver->isFile(null);
+
+  public function testIsDir(): void {
+    Assert::assertTrue ($this->driver->isDir($this->dirname));
+    Assert::assertFalse($this->driver->isDir($this->filename));
   }
-  
-  public function testIsDir() {
-    $this->assertTrue ($this->driver->isDir($this->dirname));
-    $this->assertFalse($this->driver->isDir($this->filename));
-  }
-  
-  public function testIsDirWithInvalidPath() {
-    $this->setExpectedException(InvalidArgumentException::class);
-    $this->driver->isDir(null);
-  }
-  
-  public function testFileExists() {
+
+  public function testFileExists(): void {
     $file = mockFile($this, $this->driver, $this->filename);
-    $this->assertTrue($this->driver->exists($file));
+    Assert::assertTrue($this->driver->exists($file));
   }
-  
-  public function testDirExists() {
+
+  public function testDirExists(): void {
     $dir = mockDir($this, $this->driver, $this->dirname);
-    $this->assertTrue($this->driver->exists($dir));
+    Assert::assertTrue($this->driver->exists($dir));
   }
-  
-  public function testDoesntExist() {
+
+  public function testDoesntExist(): void {
     $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
-    $this->assertFalse($this->driver->exists($file));
+    Assert::assertFalse($this->driver->exists($file));
   }
-  
-  public function testFileIsLink() {
+
+  public function testFileIsLink(): void {
     $file = mockFile($this, $this->driver, $this->linkname);
-    $this->assertTrue($this->driver->isLink($file));
+    Assert::assertTrue($this->driver->isLink($file));
   }
-  
-  public function testFileIsNotLink() {
+
+  public function testFileIsNotLink(): void {
     $file = mockFile($this, $this->driver, $this->filename);
-    $this->assertFalse($this->driver->isLink($file));
+    Assert::assertFalse($this->driver->isLink($file));
   }
-  
-  public function testDirIsLink() {
+
+  public function testDirIsLink(): void {
     //@TODO: need to figure out why unlink(...) doesn't work on directory symlinks on Windows
     //$dir = mockDir(...)
+
+    Assert::assertTrue(true);
   }
-  
-  public function testDirIsNotLink() {
+
+  public function testDirIsNotLink(): void {
     $dir = mockDir($this, $this->driver, $this->dirname);
-    $this->assertFalse($this->driver->isLink($dir));
+    Assert::assertFalse($this->driver->isLink($dir));
   }
-  
-  public function testIsLinkPathDoesntExist() {
+
+  public function testIsLinkPathDoesntExist(): void {
     $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
-    $this->assertFalse($this->driver->isLink($file));
+    Assert::assertFalse($this->driver->isLink($file));
   }
-  
-  public function testFileIsReadable() {
+
+  public function testFileIsReadable(): void {
     $file = mockFile($this, $this->driver, $this->readonly);
-    $this->assertTrue($this->driver->isReadable($file));
+    Assert::assertTrue($this->driver->isReadable($file));
   }
-  
+
   /**
    * @requires OS Linux
    */
-  public function testFileIsNotReadable() {
+  public function testFileIsNotReadable(): void {
     $file = mockFile($this, $this->driver, $this->writeonly);
-    $this->assertFalse($this->driver->isReadable($file));
+    Assert::assertFalse($this->driver->isReadable($file));
   }
-  
-  public function testDirIsReadable() {
+
+  public function testDirIsReadable(): void {
     $dir = mockDir($this, $this->driver, $this->readdir);
-    $this->assertTrue($this->driver->isReadable($dir));
+    Assert::assertTrue($this->driver->isReadable($dir));
   }
-  
+
   /**
    * @requires OS Linux
    */
-  public function testDirIsNotReadable() {
+  public function testDirIsNotReadable(): void {
     $dir = mockDir($this, $this->driver, $this->writedir);
-    $this->assertFalse($this->driver->isReadable($dir));
+    Assert::assertFalse($this->driver->isReadable($dir));
   }
-  
-  public function testFileIsWritable() {
+
+  public function testFileIsWritable(): void {
     $file = mockFile($this, $this->driver, $this->writeonly);
-    $this->assertTrue($this->driver->isWritable($file));
+    Assert::assertTrue($this->driver->isWritable($file));
   }
-  
-  public function testFileIsNotWritable() {
+
+  public function testFileIsNotWritable(): void {
     $file = mockFile($this, $this->driver, $this->readonly);
-    $this->assertFalse($this->driver->isWritable($file));
+    Assert::assertFalse($this->driver->isWritable($file));
   }
-  
-  public function testDirIsWritable() {
+
+  public function testDirIsWritable(): void {
     $dir = mockDir($this, $this->driver, $this->writedir);
-    $this->assertTrue($this->driver->isWritable($dir));
+    Assert::assertTrue($this->driver->isWritable($dir));
   }
-  
+
   /**
    * @requires OS Linux
    */
-  public function testDirIsNotWritable() {
+  public function testDirIsNotWritable(): void {
     $dir = mockDir($this, $this->driver, $this->readdir);
-    $this->assertFalse($this->driver->isWritable($dir));
+    Assert::assertFalse($this->driver->isWritable($dir));
   }
-  
-  public function testSize() {
+
+  public function testSize(): void {
     $file = mockFile($this, $this->driver, $this->filename);
-    $this->assertEquals($this->filelen, $this->driver->size($file));
+    Assert::assertEquals($this->filelen, $this->driver->size($file));
   }
-  
-  public function testSizeFileDoesntExist() {
-    $this->setExpectedException(PathNotFoundException::class);
-    
+
+  public function testSizeFileDoesntExist(): void {
+    $this->expectException(PathNotFoundException::class);
+
     $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
     $this->driver->size($file);
   }
-  
-  public function testModified() {
+
+  public function testModified(): void {
     $file = mockFile($this, $this->driver, $this->filename);
-    $this->assertInternalType('int', $this->driver->modified($file));
+
+    Assert::assertThat(
+      $this->driver->modified($file),
+      new IsType(IsType::TYPE_INT)
+    );
   }
-  
-  public function testModifiedFileDoesntExist() {
-    $this->setExpectedException(PathNotFoundException::class);
-    
+
+  public function testModifiedFileDoesntExist(): void {
+    $this->expectException(PathNotFoundException::class);
+
     $file = mockFile($this, $this->driver, $this->filename . 'idontexist');
-    $this->assertInternalType('int', $this->driver->modified($file));
+    $this->driver->modified($file);
   }
-  
-  public function testCreateFile() {
+
+  public function testCreateFile(): void {
     $filename = $this->filename . '-test-create-from-driver';
     $this->driver->createFile($filename);
-    
-    $this->assertTrue(is_file($filename));
+
+    Assert::assertTrue(is_file($filename));
   }
-  
-  public function testCreateDirectory() {
+
+  public function testCreateDirectory(): void {
     $path = 'test-create-from-driver';
     $dir = $this->driver->createDirectory($path);
-    $this->assertTrue(is_dir($dir->full_path));
+    Assert::assertDirectoryExists($dir->full_path);
   }
-  
+
 }

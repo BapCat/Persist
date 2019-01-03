@@ -1,4 +1,3 @@
-report/
 vendor/
 composer.lock
-*.kdev4
+.idea/

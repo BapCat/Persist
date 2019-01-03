@@ -1,150 +1,156 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/_mocks.php';
 require_once __DIR__ . '/FileCreatorTrait.php';
 
+use BapCat\Persist\Drivers\Local\LocalDriver;
 use BapCat\Persist\Drivers\Local\LocalFile;
 use BapCat\Persist\PathAlreadyExistsException;
 use BapCat\Persist\Drivers\Local\LocalFileReader;
 use BapCat\Persist\Drivers\Local\LocalFileWriter;
+use PHPUnit\Framework\TestCase;
 
-class LocalFileTest extends PHPUnit_Framework_TestCase {
+class LocalFileTest extends TestCase {
   use FileCreatorTrait;
-  
+
+  /** @var  LocalDriver  $driver */
   private $driver;
-  
-  public function setUp() {
+
+  public function setUp(): void {
+    parent::setUp();
     $this->createTestFiles();
     $this->driver = mockLocalDriver($this, $this->datadir);
   }
-  
-  public function tearDown() {
+
+  public function tearDown(): void {
+    parent::tearDown();
     $this->deleteTestFiles();
   }
-  
-  public function testConstruct() {
+
+  public function testConstruct(): void {
     $localFile = new LocalFile($this->driver, $this->filename);
-    $this->assertEquals($localFile, $localFile->makeLocal());
-    $this->assertEquals($localFile->full_path, $this->driver->getFullPath($this->filename));
+    static::assertEquals($localFile, $localFile->makeLocal());
+    static::assertEquals($localFile->full_path, $this->driver->getFullPath($this->filename));
   }
-  
-  public function testAlreadyExists() {
+
+  public function testAlreadyExists(): void {
     // NOTE: Comes from FileCreatorTrait
     $localFile = new LocalFile($this->driver, $this->filename);
-    $this->setExpectedException(PathAlreadyExistsException::class);
+    $this->expectException(PathAlreadyExistsException::class);
     $localFile->create();
   }
-  
-  public function testRead() {
+
+  public function testRead(): void {
     $filename = "{$this->filename}-new-read";
     touch($filename);
-    
+
     $file = new LocalFile($this->driver, $filename);
-    
+
     $read = false;
     $file->read(function(LocalFileReader $reader) use(&$read) {
       $read = true;
     });
-    
-    $this->assertTrue($read);
+
+    static::assertTrue($read);
   }
-  
-  public function testReadAll() {
+
+  public function testReadAll(): void {
     $filename = "{$this->filename}-readall";
     $contents = 'this is a test';
-    
+
     file_put_contents($filename, $contents);
-    
+
     $file = new LocalFile($this->driver, $filename);
-    
-    $this->assertSame($contents, $file->readAll());
+
+    static::assertSame($contents, $file->readAll());
   }
-  
+
   /**
    * @expectedException Exception
    */
-  public function testReadAllFailure() {
+  public function testReadAllFailure(): void {
     $filename = "{$this->filename}-readall-nope";
-    
+
     $file = new LocalFile($this->driver, $filename);
     $file->readAll();
   }
-  
-  public function testWrite() {
+
+  public function testWrite(): void {
     $filename = "{$this->filename}-new-write";
     touch($filename);
-    
+
     $file = new LocalFile($this->driver, $filename);
-    
+
     $written = false;
     $file->write(function(LocalFileWriter $reader) use(&$written) {
       $written = true;
     });
-    
-    $this->assertTrue($written);
+
+    static::assertTrue($written);
   }
-  
-  public function testWriteAll() {
+
+  public function testWriteAll(): void {
     $filename = "{$this->filename}-writeall";
     $contents = 'this is a test';
-    
+
     $file = new LocalFile($this->driver, $filename);
     $file->writeAll($contents);
-    
-    $this->assertSame($contents, file_get_contents($filename));
+
+    static::assertSame($contents, file_get_contents($filename));
   }
-  
+
   /**
    * @expectedException Exception
    */
-  public function testWriteAllFailure() {
+  public function testWriteAllFailure(): void {
     $filename = "dirdoesnotexist/{$this->filename}-writeall";
     $contents = 'this is a test';
-    
+
     $file = new LocalFile($this->driver, $filename);
     $file->writeAll($contents);
   }
-  
-  public function testCreate() {
+
+  public function testCreate(): void {
     $localFile = new LocalFile($this->driver, "{$this->filename}-new-create");
     $localFile->create();
+    static::assertTrue(true);
   }
-  
-  public function testMove() {
+
+  public function testMove(): void {
     $to_move = new LocalFile($this->driver, "{$this->filename}-to-move");
     $moved   = new LocalFile($this->driver, "{$this->filename}-moved");
-    
-    $this->assertFalse($moved->exists);
-    
+
+    static::assertFalse($moved->exists);
+
     $to_move->create();
-    
-    $this->assertTrue($to_move->move($moved));
-    
-    $this->assertFalse($to_move->exists);
-    $this->assertTrue($moved->exists);
+
+    static::assertTrue($to_move->move($moved));
+
+    static::assertFalse($to_move->exists);
+    static::assertTrue($moved->exists);
   }
-  
-  public function testCopy() {
+
+  public function testCopy(): void {
     $to_copy = new LocalFile($this->driver, "{$this->filename}-to-copy");
     $copied  = new LocalFile($this->driver, "{$this->filename}-copied");
-    
-    $this->assertFalse($copied->exists);
-    
+
+    static::assertFalse($copied->exists);
+
     $to_copy->create();
-    
-    $this->assertTrue($to_copy->copy($copied));
-    
-    $this->assertTrue($to_copy->exists);
-    $this->assertTrue($copied->exists);
+
+    static::assertTrue($to_copy->copy($copied));
+
+    static::assertTrue($to_copy->exists);
+    static::assertTrue($copied->exists);
   }
-  
-  public function testDelete() {
+
+  public function testDelete(): void {
     $filename = "{$this->filename}-new-delete";
     touch($filename);
-    
+
     $file = new LocalFile($this->driver, $filename);
-    
-    $this->assertTrue($file->delete());
-    $this->assertFalse(file_exists($file->full_path));
+
+    static::assertTrue($file->delete());
+    static::assertFileNotExists($file->full_path);
   }
 }

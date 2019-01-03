@@ -1,37 +1,28 @@
-<?php namespace BapCat\Persist;
+<?php declare(strict_types=1); namespace BapCat\Persist;
 
 use Exception;
 
 /**
  * The path specified is not a file
- * 
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
  */
 class NotAFileException extends Exception {
-  /**
-   * The path
-   * 
-   * @var string
-   */
+  /** @var  string  $path */
   private $path;
-  
+
   /**
-   * Constructor
-   * 
    * @param  string  $path  The path
    */
-  public function __construct($path) {
+  public function __construct(string $path) {
     parent::__construct("[$path] exists, but is not a file");
     $this->path = $path;
   }
-  
+
   /**
    * Gets the path
-   * 
-   * @return  string  The path
+   *
+   * @return  string
    */
-  public function getPath() {
+  public function getPath(): string {
     return $this->path;
   }
 }
