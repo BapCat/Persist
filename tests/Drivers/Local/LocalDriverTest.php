@@ -10,6 +10,7 @@ use BapCat\Persist\NotADirectoryException;
 use BapCat\Persist\NotAFileException;
 use BapCat\Persist\PathNotFoundException;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
 
 class LocalDriverTest extends TestCase {
@@ -164,7 +165,11 @@ class LocalDriverTest extends TestCase {
 
   public function testModified(): void {
     $file = mockFile($this, $this->driver, $this->filename);
-    Assert::assertIsInt($this->driver->modified($file));
+
+    Assert::assertThat(
+      $this->driver->modified($file),
+      new IsType(IsType::TYPE_INT)
+    );
   }
 
   public function testModifiedFileDoesntExist(): void {
