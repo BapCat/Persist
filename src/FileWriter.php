@@ -1,52 +1,44 @@
-<?php namespace BapCat\Persist;
+<?php declare(strict_types=1); namespace BapCat\Persist;
 
-use BapCat\Persist\PathNotFoundException;
 use BapCat\Propifier\PropifierTrait;
 
 /**
  * Defines a class capable of writing to a file
- * 
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
+ *
+ * @property-read  File  $file  The file to write to
  */
 abstract class FileWriter {
   use PropifierTrait;
-  
-  /**
-   * The file to write to
-   * 
-   * @var File
-   */
+
+  /** @var  File  $file */
   private $file;
-  
+
   /**
-   * Constructor
-   * 
-   * @param  File  $file  THe file to write to
+   * @param  File  $file  The file to write to
+   *
+   * @throws  PathNotFoundException
    */
   public function __construct(File $file) {
     if(!$file->exists) {
-      throw new PathNotFoundException($file);
+      throw new PathNotFoundException($file->path);
     }
-    
+
     $this->file = $file;
   }
-  
+
   /**
-   * Gets the file this writer will write to
-   * 
-   * @return File  The file
+   * @return  File
    */
-  protected function getFile() {
+  protected function getFile(): File {
     return $this->file;
   }
-  
+
   /**
    * Writes an arbitrary block of data to the file
-   * 
+   *
    * @param  mixed  $data  The data to write to the file
-   * 
+   *
    * @return  int  The number of bytes written
    */
-  public abstract function write($data);
+  public abstract function write($data): int;
 }

@@ -1,73 +1,62 @@
-<?php namespace BapCat\Persist;
+<?php declare(strict_types=1); namespace BapCat\Persist;
 
-use BapCat\Persist\PathNotFoundException;
 use BapCat\Propifier\PropifierTrait;
 
 /**
  * Defines a class capable of reading from a file
- * 
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
+ *
+ * @property-read  File  $file       The file to read
+ * @property-read  int   $length     The length of the file
+ * @property-read  int   $remaining  How much is left to be read
+ * @property-read  bool  $has_more   Is there more data to read?
  */
 abstract class FileReader {
   use PropifierTrait;
-  
-  /**
-   * The file to read from
-   * 
-   * @var File
-   */
+
+  /** @var  File  $file */
   private $file;
-  
+
   /**
-   * Constructor
-   * 
    * @param  File  $file  The file to read from
+   *
+   * @throws  PathNotFoundException
    */
   public function __construct(File $file) {
     if(!$file->exists) {
-      throw new PathNotFoundException($file);
+      throw new PathNotFoundException($file->path);
     }
-    
+
     $this->file = $file;
   }
-  
+
   /**
-   * Gets the file this reader will read from
-   * 
-   * @return File  The file
+   * @return  File
    */
-  protected function getFile() {
+  protected function getFile(): File {
     return $this->file;
   }
-  
+
   /**
-   * Gets the length of the file
-   * 
-   * @return  integer  The length of the file
+   * @return  int
    */
-  protected abstract function getLength();
-  
+  protected abstract function getLength(): int;
+
   /**
-   * Get the number of remaining character
-   * 
-   * @return  integer  The number of remaining characters
+   * @return  int
    */
-  protected abstract function getRemaining();
-  
+  protected abstract function getRemaining(): int;
+
   /**
-   * Checks if the file has data left that hasn't been read yet
-   * 
-   * @return  string  True if there is more data in the file, false otherwise
+   * @return  bool
    */
-  protected abstract function getHasMore();
-  
+  protected abstract function getHasMore(): bool;
+
   /**
    * Reads an arbitrary block of data from the file
-   * 
-   * @param  int     $length  The amount of data to read from the file
-   * 
-   * @return string  The data read from the file
+   *
+   * @param  int  $length  The amount of data to read from the file
+   *
+   * @return  string  The data read from the file
    */
-  public abstract function read($length = 0);
+  public abstract function read(int $length = 0): string;
 }

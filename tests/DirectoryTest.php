@@ -1,48 +1,50 @@
-<?php
+<?php declare(strict_types=1);
+
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/_mocks.php';
 
-class DirectoryTest extends PHPUnit_Framework_TestCase {
-  public function testProperties() {
+class DirectoryTest extends TestCase {
+  public function testProperties(): void {
     $dirname = 'test';
     $driver = mockDriver($this);
     $dir = mockDir($this, $driver, $dirname);
-    
-    $this->assertEquals(['a', 'b'], $dir->children);
+
+    static::assertEquals(['a', 'b'], $dir->children);
   }
-  
-  public function testGetChildren() {
+
+  public function testGetChildren(): void {
     $dirname = 'test';
     $driver = mockDirDriver($this, $dirname);
     $dir = mockDir($this, $driver, $dirname);
-    
-    $this->assertSame(['a', 'b'], $dir->children);
+
+    static::assertSame(['a', 'b'], $dir->children);
   }
-  
-  public function testItrChildren() {
+
+  public function testItrChildren(): void {
     $dirname = 'test';
     $driver = mockDirDriver($this, $dirname);
     $dir = mockDir($this, $driver, $dirname);
-    
+
     $files = [];
-    
+
     foreach($dir->children as $child) {
       $files[] = $child;
     }
-    
-    $this->assertSame(['a', 'b'], $files);
+
+    static::assertSame(['a', 'b'], $files);
   }
-  
-  public function testGetChild() {
+
+  public function testGetChild(): void {
     $dirname = 'test';
     $driver = mockDirDriver($this, $dirname);
     $dir = mockDir($this, $driver, $dirname);
-    
-    $this->assertEquals('test', $dir->child['test']->name);
-    
+
+    static::assertEquals('test', $dir->child['test']->name);
+
     $driver = mockFileDriver($this, $dirname);
     $dir = mockDir($this, $driver, $dirname);
-    
-    $this->assertEquals('test', $dir->child['test']->name);
+
+    static::assertEquals('test', $dir->child['test']->name);
   }
 }

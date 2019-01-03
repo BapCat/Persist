@@ -1,73 +1,78 @@
-<?php namespace BapCat\Persist;
+<?php declare(strict_types=1); namespace BapCat\Persist;
 
 /**
  * Defines a file in a persistent filesystem
  *
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
+ * @property-read  int  $size  The size of this file
  */
 abstract class File extends Path {
   /**
-   * Gets the size of this file
-   *
-   * @return  int  The size of the file
+   * @return  int
    */
-  protected function getSize() {
+  protected function getSize(): int {
     return $this->driver->size($this);
   }
-  
+
   /**
    * Caches a copy of this file on the local filesystem (if it isn't already)
    *
    * @return  File  A File instance that points to the local file
    */
-  public abstract function makeLocal();
-  
+  public abstract function makeLocal(): File;
+
   /**
    * Opens a file for reading
    *
-   * @param  callable<FileReader>  $read  Called once the file is opened
+   * @param  callable  $read  Called once the file is opened
+   *
+   * @return  void
+   *
+   * @throws PathNotFoundException
    */
-  public abstract function read(callable $read);
-  
+  public abstract function read(callable $read): void;
+
   /**
    * Opens a file and returns its contents
    *
    * @return  string  The contents of the file
    */
-  public abstract function readAll();
-  
+  public abstract function readAll(): string;
+
   /**
    * Opens a file for writing
    *
-   * @param  callable<FileWriter>  $write  Called once the file is opened
+   * @param  callable  $write  Called once the file is opened
+   *
+   * @return  void
+   *
+   * @throws PathNotFoundException
    */
-  public abstract function write(callable $write);
-  
+  public abstract function write(callable $write): void;
+
   /**
    * Opens a file and writes to it
    *
    * @param  string  $contents  The contents to write
    *
-   * @return  integer  The length of the data written
+   * @return  int  The length of the data written
    */
-  public abstract function writeAll($contents);
-  
+  public abstract function writeAll(string $contents): int;
+
   /**
    * Moves a file to a new location
    *
    * @param  File  $dest  Where to move the file
    *
-   * @return  boolean  True on success, false otherwise
+   * @return  bool  True on success, false otherwise
    */
-  public abstract function move(File $dest);
-  
+  public abstract function move(File $dest): bool;
+
   /**
    * Copies a file to a new location
    *
    * @param  File  $dest  Where to copy the file
    *
-   * @return  boolean  True on success, false otherwise
+   * @return  bool  True on success, false otherwise
    */
-  public abstract function copy(File $dest);
+  public abstract function copy(File $dest): bool;
 }

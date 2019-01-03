@@ -1,34 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 
 require_once __DIR__ . '/_mocks.php';
 
 use BapCat\Persist\PathNotFoundException;
+use PHPUnit\Framework\TestCase;
 
-class FileWriterTest extends PHPUnit_Framework_TestCase {
-  public function testFileDoesntExist() {
-    $this->setExpectedException(PathNotFoundException::class);
-    
+class FileWriterTest extends TestCase {
+  public function testFileDoesntExist(): void {
+    $this->expectException(PathNotFoundException::class);
+
     $driver = mockDriver($this, false);
     $file = mockFile($this, $driver, '');
-    
+
     mockFileWriter($this, $file);
   }
-  
-  public function testProperties() {
+
+  public function testProperties(): void {
     $driver = mockDriver($this);
     $file = mockFile($this, $driver, '');
-    
+
     $out = mockFileWriter($this, $file);
-    
-    $this->assertEquals($file, $out->file);
+
+    static::assertEquals($file, $out->file);
   }
-  
-  public function testWrite() {
+
+  public function testWrite(): void {
     $driver = mockDriver($this);
     $file = mockFile($this, $driver, '');
-    
+
     $out = mockFileWriter($this, $file);
-    
-    $this->assertEquals(10, $out->write('1234567890'));
+
+    static::assertEquals(10, $out->write('1234567890'));
   }
 }

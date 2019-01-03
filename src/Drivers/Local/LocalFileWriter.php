@@ -1,16 +1,16 @@
-<?php namespace BapCat\Persist\Drivers\Local;
+<?php declare(strict_types=1); namespace BapCat\Persist\Drivers\Local;
 
 use BapCat\Persist\FileWriter;
 
 /**
  * A reader capable of reading LocalFiles
  *
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
+ * @property-read  LocalFile  $file  The file to read
  */
 class LocalFileWriter extends FileWriter {
+  /** @var  resource  $ptr */
   private $ptr;
-  
+
   /**
    * {@inheritdoc}
    *
@@ -21,18 +21,18 @@ class LocalFileWriter extends FileWriter {
     parent::__construct($file);
     $this->ptr = $ptr;
   }
-  
+
   /**
    * {@inheritdoc}
    */
-  public function write($data) {
+  public function write($data): int {
     $written = fwrite($this->ptr, $data);
-    
+
     if($written === false) {
       //@TODO
       throw new \Exception("Error writing to file [{$this->file->full_path}]");
     }
-    
+
     return $written;
   }
 }

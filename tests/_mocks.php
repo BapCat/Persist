@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use BapCat\Persist\Directory;
 use BapCat\Persist\Driver;
@@ -6,126 +6,125 @@ use BapCat\Persist\File;
 use BapCat\Persist\Path;
 use BapCat\Persist\FileReader;
 use BapCat\Persist\FileWriter;
+use PHPUnit\Framework\TestCase;
 
-function mockFileDriver(PHPUnit_Framework_TestCase $testcase, $filename) {
+function mockFileDriver(TestCase $testcase, string $filename): Driver {
   $driver = mockDriver($testcase);
   $file = mockFile($testcase, $driver, $filename);
-  
+
   $driver
     ->method('isFile')
     ->willReturn(true);
-  
+
   $driver
     ->method('isDir')
     ->willReturn(false);
-  
+
   $driver
     ->method('instantiateFile')
     ->willReturn($file);
-  
+
   return $driver;
 }
 
-function mockDirDriver(PHPUnit_Framework_TestCase $testcase, $filename) {
+function mockDirDriver(TestCase $testcase, string $filename): Driver {
   $driver = mockDriver($testcase);
   $dir = mockDir($testcase, $driver, $filename);
-  
+
   $driver
     ->method('isFile')
     ->willReturn(false);
-  
+
   $driver
     ->method('isDir')
     ->willReturn(true);
-  
+
   $driver
     ->method('instantiateDir')
     ->willReturn($dir);
-  
+
   return $driver;
 }
 
-function mockDriver(PHPUnit_Framework_TestCase $testcase, $exists = true) {
+function mockDriver(TestCase $testcase, bool $exists = true): Driver {
   $driver = $testcase
     ->getMockBuilder(Driver::class)
     ->getMockForAbstractClass();
-  
+
   $driver
     ->method('exists')
     ->willReturn($exists);
-  
+
   $driver
     ->method('size')
     ->willReturn(100);
-  
+
   $driver
     ->method('isLink')
     ->willReturn(true);
-  
+
   $driver
     ->method('isReadable')
     ->willReturn(true);
-  
+
   $driver
     ->method('isWritable')
     ->willReturn(true);
-  
+
   $driver
     ->method('modified')
     ->willReturn(0);
-  
+
   return $driver;
 }
 
-function mockPath(PHPUnit_Framework_TestCase $testcase, Driver $driver, $filename) {
-  $path = $testcase->getMockForAbstractClass(Path::class, [$driver, $filename]);
-  return $path;
+function mockPath(TestCase $testcase, Driver $driver, string $filename): Path {
+  return $testcase->getMockBuilder(Path::class)->setConstructorArgs([$driver, $filename])->getMockForAbstractClass();
 }
 
-function mockFile(PHPUnit_Framework_TestCase $testcase, Driver $driver, $filename) {
-  $file = $testcase->getMockForAbstractClass(File::class, [$driver, $filename]);
-  return $file;
+function mockFile(TestCase $testcase, Driver $driver, string $filename): File {
+  return $testcase->getMockBuilder(File::class)->setConstructorArgs([$driver, $filename])->getMockForAbstractClass();
 }
 
-function mockDir(PHPUnit_Framework_TestCase $testcase, Driver $driver, $filename) {
-  $dir = $testcase->getMockForAbstractClass(Directory::class, [$driver, $filename]);
-  
+function mockDir(TestCase $testcase, Driver $driver, string $filename): Directory {
+  $dir = $testcase->getMockBuilder(Directory::class)->setConstructorArgs([$driver, $filename])->getMockForAbstractClass();
+
   $dir
     ->method('loadChildren')
     ->willReturn(['a', 'b']);
-  
+
   return $dir;
 }
 
-function mockFileReader(PHPUnit_Framework_TestCase $testcase, File $file, $length) {
-  $in = $testcase->getMockForAbstractClass(FileReader::class, [$file]);
-  
+function mockFileReader(TestCase $testcase, File $file, int $length): FileReader {
+  $in = $testcase->getMockBuilder(FileReader::class)->setConstructorArgs([$file])->getMockForAbstractClass();
+
   $remaining = $length;
-  
+
   $in
     ->method('getHasMore')
-    ->will($testcase->returnCallback(function() use(&$remaining) {
+    ->will(TestCase::returnCallback(function() use(&$remaining) {
       return $remaining > 0;
     }));
-  
+
   $in
     ->method('read')
-    ->will($testcase->returnCallback(function($length = 0) use(&$remaining) {
+    ->will(TestCase::returnCallback(function(int $length = 0) use(&$remaining) {
       $remaining -= $length;
-      return openssl_random_pseudo_bytes($length);
+      return random_bytes($length);
     }));
-  
+
   return $in;
 }
 
-function mockFileWriter(PHPUnit_Framework_TestCase $testcase, File $file) {
-  $in = $testcase->getMockForAbstractClass(FileWriter::class, [$file]);
-  
+function mockFileWriter(TestCase $testcase, File $file): FileWriter {
+  $in = $testcase->getMockBuilder(FileWriter::class)->setConstructorArgs([$file])->getMockForAbstractClass();
+
   $in
     ->method('write')
-    ->will($testcase->returnCallback(function($data) {
+    ->will(TestCase::returnCallback(function($data) {
       return strlen($data);
     }));
-  
+
   return $in;
 }

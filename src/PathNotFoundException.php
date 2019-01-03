@@ -1,37 +1,30 @@
-<?php namespace BapCat\Persist;
+<?php declare(strict_types=1); namespace BapCat\Persist;
 
 use Exception;
 
 /**
  * A path (file or directory) could not be found
- * 
- * @author    Corey Frenette
- * @copyright Copyright (c) 2015, BapCat
  */
 class PathNotFoundException extends Exception {
   /**
-   * The path that could not be found
-   * 
-   * @var string
+   * @var  string  $path
    */
   private $path;
-  
+
   /**
-   * Constructor
-   * 
-   * @param string $path The path that could not be found
+   * @param  string  $path  The path that could not be found
    */
-  public function __construct($path) {
+  public function __construct(string $path) {
     parent::__construct("[$path] does not exist");
     $this->path = $path;
   }
-  
+
   /**
    * Gets the path that could not be found
-   * 
-   * @return string The path that could not be found
+   *
+   * @return  string
    */
-  public function getPath() {
+  public function getPath(): string {
     return $this->path;
   }
 }
