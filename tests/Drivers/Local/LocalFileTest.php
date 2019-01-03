@@ -113,6 +113,7 @@ class LocalFileTest extends TestCase {
   public function testCreate(): void {
     $localFile = new LocalFile($this->driver, "{$this->filename}-new-create");
     $localFile->create();
+    static::assertTrue(true);
   }
 
   public function testMove(): void {

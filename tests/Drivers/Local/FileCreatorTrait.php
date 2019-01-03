@@ -82,7 +82,7 @@ trait FileCreatorTrait {
   private function listFiles(string $dirPath): array {
     $blacklist = ['.', '..'];
 
-    return array_filter(scandir($dirPath, null), function($path) use($blacklist) {
+    return array_filter(scandir($dirPath), function($path) use($blacklist) {
       return !in_array($path, $blacklist, true);
     });
   }
