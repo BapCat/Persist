@@ -8,6 +8,8 @@
 abstract class File extends Path {
   /**
    * @return  int
+   *
+   * @throws  PathNotFoundException
    */
   protected function getSize(): int {
     return $this->driver->size($this);
@@ -27,7 +29,7 @@ abstract class File extends Path {
    *
    * @return  void
    *
-   * @throws PathNotFoundException
+   * @throws  PathNotFoundException
    */
   public abstract function read(callable $read): void;
 
@@ -35,6 +37,8 @@ abstract class File extends Path {
    * Opens a file and returns its contents
    *
    * @return  string  The contents of the file
+   *
+   * @throws  FileReadException
    */
   public abstract function readAll(): string;
 
@@ -45,7 +49,7 @@ abstract class File extends Path {
    *
    * @return  void
    *
-   * @throws PathNotFoundException
+   * @throws  PathNotFoundException
    */
   public abstract function write(callable $write): void;
 
@@ -55,6 +59,8 @@ abstract class File extends Path {
    * @param  string  $contents  The contents to write
    *
    * @return  int  The length of the data written
+   *
+   * @throws  FileWriteException
    */
   public abstract function writeAll(string $contents): int;
 

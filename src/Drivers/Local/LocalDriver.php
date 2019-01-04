@@ -5,7 +5,6 @@ use BapCat\Persist\Driver;
 use BapCat\Persist\File;
 use BapCat\Persist\Path;
 use BapCat\Persist\PathNotFoundException;
-use DateTime;
 
 /**
  * A driver for interacting with local files

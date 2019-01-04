@@ -38,6 +38,8 @@ abstract class FileReader {
 
   /**
    * @return  int
+   *
+   * @throws  FileReadException
    */
   protected abstract function getLength(): int;
 
@@ -57,6 +59,8 @@ abstract class FileReader {
    * @param  int  $length  The amount of data to read from the file
    *
    * @return  string  The data read from the file
+   *
+   * @throws  FileReadException
    */
   public abstract function read(int $length = 0): string;
 }

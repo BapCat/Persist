@@ -1,7 +1,5 @@
 <?php declare(strict_types=1); namespace BapCat\Persist;
 
-use DateTime;
-
 /**
  * Defines a driver for a given persistent file storage medium
  * (eg. local filesystem, AWS, etc)

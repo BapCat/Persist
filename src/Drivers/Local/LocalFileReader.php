@@ -1,6 +1,7 @@
 <?php declare(strict_types=1); namespace BapCat\Persist\Drivers\Local;
 
 use BapCat\Persist\FileReader;
+use BapCat\Persist\FileReadException;
 
 /**
  * A reader capable of reading LocalFiles
@@ -29,8 +30,7 @@ class LocalFileReader extends FileReader {
     $size = @filesize($this->file->full_path);
 
     if($size === false) {
-      //@TODO
-      throw new \Exception("Error getting file length [{$this->file->full_path}]");
+      throw new FileReadException($this->file, 'Error getting file length');
     }
 
     return $size;
@@ -61,8 +61,7 @@ class LocalFileReader extends FileReader {
     $read = fread($this->ptr, $length);
 
     if($read === false) {
-      //@TODO
-      throw new \Exception("Error reading from file [{$this->file->full_path}]");
+      throw new FileReadException($this->file, 'Error reading from file');
     }
 
     return $read;
