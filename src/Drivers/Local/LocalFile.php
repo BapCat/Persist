@@ -1,14 +1,17 @@
 <?php declare(strict_types=1); namespace BapCat\Persist\Drivers\Local;
 
 use BapCat\Persist\File;
+use BapCat\Persist\FileReadException;
+use BapCat\Persist\FileWriteException;
 use BapCat\Persist\PathAlreadyExistsException;
 use RuntimeException;
 
 /**
  * A file residing on a local filesystem
  *
- * @property-read  LocalDriver  $driver     The filesystem driver that backs this Path
- * @property-read  string       $full_path  The full filesystem path to this directory
+ * @property-read  LocalDriver     $driver     The filesystem driver that backs this Path
+ * @property-read  LocalDirectory  $parent     The parent directory of this file or directory
+ * @property-read  string          $full_path  The full filesystem path to this directory
  */
 class LocalFile extends File {
   /**
@@ -60,8 +63,7 @@ class LocalFile extends File {
     $contents = @file_get_contents($this->full_path);
 
     if($contents === false) {
-      //@TODO
-      throw new \Exception("Error reading file contents [{$this->full_path}]");
+      throw new FileReadException($this, 'Error reading file contents');
     }
 
     return $contents;
@@ -83,15 +85,13 @@ class LocalFile extends File {
     $parent = $this->parent;
 
     if(!$parent->exists) {
-      //@TODO
-      throw new \Exception("Parent doesn't exist");
+      throw new FileWriteException($this, "Parent doesn't exist");
     }
 
     $temp = tempnam($parent->full_path, '');
 
     if($temp === false) {
-      //@TODO
-      throw new \Exception("Error creating temp file");
+      throw new FileWriteException($this, 'Error creating temp file');
     }
 
     chmod($temp, 0666 & ~umask());
@@ -99,15 +99,13 @@ class LocalFile extends File {
     $written = @file_put_contents($temp, $contents);
 
     if($written === false) {
-      //@TODO
-      throw new \Exception("Error writing file contents [{$this->full_path}]");
+      throw new FileWriteException($this, 'Error writing file contents');
     }
 
     $renamed = rename($temp, $this->full_path);
 
     if($renamed === false) {
-        //@TODO
-        throw new \Exception("Error while renaming [$temp] to [{$this->full_path}]");
+      throw new FileWriteException($this, "Error while renaming [$temp] to [{$this->full_path}]");
     }
 
     return $written;

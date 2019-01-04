@@ -39,6 +39,8 @@ abstract class FileWriter {
    * @param  mixed  $data  The data to write to the file
    *
    * @return  int  The number of bytes written
+   *
+   * @throws  FileWriteException
    */
   public abstract function write($data): int;
 }

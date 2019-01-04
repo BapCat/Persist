@@ -1,7 +1,6 @@
 <?php declare(strict_types=1); namespace BapCat\Persist;
 
 use BapCat\Propifier\PropifierTrait;
-use DateTime;
 
 use function dirname;
 
@@ -16,7 +15,7 @@ use function dirname;
  * @property-read  bool       $is_link      If this file or directory is a symlink
  * @property-read  bool       $is_readable  If this file or directory is readable
  * @property-read  bool       $is_writable  If this file or directory is writable
- * @property-read  DateTime   $modified     The last time this file or directory was modified
+ * @property-read  int        $modified     The last time this file or directory was modified
  */
 abstract class Path {
   use PropifierTrait;

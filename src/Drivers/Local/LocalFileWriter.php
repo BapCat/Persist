@@ -1,5 +1,6 @@
 <?php declare(strict_types=1); namespace BapCat\Persist\Drivers\Local;
 
+use BapCat\Persist\FileWriteException;
 use BapCat\Persist\FileWriter;
 
 /**
@@ -29,8 +30,7 @@ class LocalFileWriter extends FileWriter {
     $written = fwrite($this->ptr, $data);
 
     if($written === false) {
-      //@TODO
-      throw new \Exception("Error writing to file [{$this->file->full_path}]");
+      throw new FileWriteException($this->file, 'Error writing to file');
     }
 
     return $written;
