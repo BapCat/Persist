@@ -2,7 +2,7 @@
   "name": "bapcat/persist",
   "description": "A unified, object-oriented way to store data across media",
   "license": "GPL-3.0-or-later",
-  "homepage": "http://github.com/BapCat/Persist",
+  "homepage": "https://github.com/BapCat/Persist",
   "keywords": ["File", "System", "Persist", "Persistence", "Storage", "Medium", "Media"],
   "authors": [
     {
@@ -10,13 +10,21 @@
       "email": "corey@narwhunderful.com"
     }
   ],
+  "config": {
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.4"
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
   "require": {
-    "php": ">=7.1",
-    "bapcat/propifier": "^2.0"
+    "php" : "^7.4|^8.0",
+    "bapcat/propifier": "^3.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
-    "phpunit/phpunit": "^7.5"
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {
