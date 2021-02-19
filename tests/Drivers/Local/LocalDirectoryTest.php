@@ -119,7 +119,7 @@ class LocalDirectoryTest extends TestCase {
     chmod($this->writedir,  0755);
 
     static::assertTrue($directory->delete());
-    static::assertFileNotExists($directory->full_path);
+    static::assertFileDoesNotExist($directory->full_path);
 
     // Recreate data dir so next tests pass
     $directory->create();

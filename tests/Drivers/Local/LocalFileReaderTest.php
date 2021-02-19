@@ -33,7 +33,7 @@ class LocalFileReaderTest extends TestCase {
     $this->file = $this
       ->getMockBuilder(LocalFile::class)
       ->setConstructorArgs([$driver, $path])
-      ->setMethods(['getFullPath', 'getExists'])
+      ->onlyMethods(['getFullPath', 'getExists'])
       ->getMock()
     ;
 

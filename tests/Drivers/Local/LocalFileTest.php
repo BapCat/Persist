@@ -5,6 +5,8 @@ require_once __DIR__ . '/FileCreatorTrait.php';
 
 use BapCat\Persist\Drivers\Local\LocalDriver;
 use BapCat\Persist\Drivers\Local\LocalFile;
+use BapCat\Persist\FileReadException;
+use BapCat\Persist\FileWriteException;
 use BapCat\Persist\PathAlreadyExistsException;
 use BapCat\Persist\Drivers\Local\LocalFileReader;
 use BapCat\Persist\Drivers\Local\LocalFileWriter;
@@ -65,12 +67,10 @@ class LocalFileTest extends TestCase {
     static::assertSame($contents, $file->readAll());
   }
 
-  /**
-   * @expectedException Exception
-   */
   public function testReadAllFailure(): void {
     $filename = "{$this->filename}-readall-nope";
 
+    $this->expectException(FileReadException::class);
     $file = new LocalFile($this->driver, $filename);
     $file->readAll();
   }
@@ -99,13 +99,11 @@ class LocalFileTest extends TestCase {
     static::assertSame($contents, file_get_contents($filename));
   }
 
-  /**
-   * @expectedException Exception
-   */
   public function testWriteAllFailure(): void {
     $filename = "dirdoesnotexist/{$this->filename}-writeall";
     $contents = 'this is a test';
 
+    $this->expectException(FileWriteException::class);
     $file = new LocalFile($this->driver, $filename);
     $file->writeAll($contents);
   }
@@ -151,6 +149,6 @@ class LocalFileTest extends TestCase {
     $file = new LocalFile($this->driver, $filename);
 
     static::assertTrue($file->delete());
-    static::assertFileNotExists($file->full_path);
+    static::assertFileDoesNotExist($file->full_path);
   }
 }
